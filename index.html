@@ -39,6 +39,13 @@
             position: relative;
         }
 
+        body.dark-mode {
+            --primary-gradient: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e0;
+            --white: #2d3748;
+        }
+
         body::before {
             content: '';
             position: fixed;
@@ -137,6 +144,27 @@
             transform: translateY(-2px);
             box-shadow: var(--shadow-medium);
             border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .dark-mode-toggle {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            color: white;
+            border-radius: var(--border-radius);
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 10;
+        }
+
+        .dark-mode-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
         }
 
         .main-grid {
@@ -811,6 +839,23 @@
             box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4);
         }
 
+        .clear-history-btn {
+            background: linear-gradient(135deg, #f56565 0%, #ed64a6 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(245, 101, 101, 0.3);
+        }
+
+        .clear-history-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(245, 101, 101, 0.4);
+        }
+
         .order-item {
             background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
             border-radius: var(--border-radius);
@@ -945,6 +990,7 @@
 </head>
 <body>
     <div class="container">
+        <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙</button>
         <header class="header">
             <div class="header-decoration">🧽</div>
             <h1>Cleaning Supplies Platform</h1>
@@ -958,7 +1004,9 @@
         <div class="main-grid">
             <section class="supplies-section">
                 <h2 class="section-title">🧽 Available Supplies</h2>
-                
+
+                <input type="text" id="supplySearch" class="form-input" placeholder="Search supplies..." oninput="filterSupplies()" style="margin-bottom: 20px;">
+
                 <div class="supplies-grid" id="suppliesGrid">
                     <!-- Supply cards will be generated here -->
                 </div>
@@ -1055,6 +1103,7 @@
                 </select>
                 <input type="text" id="itemFilter" class="form-input" style="width: auto; min-width: 200px;" placeholder="Filter by item name..." oninput="filterOrders()">
                 <button class="export-btn" onclick="exportToCSV()">📄 Export CSV</button>
+                <button class="clear-history-btn" onclick="clearOrderHistory()">🗑️ Clear History</button>
             </div>
             
             <div id="orderHistoryList">
@@ -1082,6 +1131,8 @@
         let supplyQuantities = {};
 
         // Initialize the application
+        let darkMode = localStorage.getItem('darkMode') === 'true';
+
         function initializeApp() {
             predefinedSupplies.forEach(supply => {
                 supplyQuantities[supply.id] = 1;
@@ -1089,15 +1140,16 @@
             renderSupplies();
             updateOrderButton();
             populateCleanerFilter();
+            applyDarkMode();
         }
 
         // Render predefined supplies
-        function renderSupplies() {
+        function renderSupplies(list = predefinedSupplies) {
             const suppliesGrid = document.getElementById('suppliesGrid');
-            suppliesGrid.innerHTML = predefinedSupplies.map(supply => `
+            suppliesGrid.innerHTML = list.map(supply => `
                 <div class="supply-card" data-supply-id="${supply.id}">
                     <div class="supply-image-container">
-                        <img class="supply-image" src="${supply.imageSrc}" alt="${supply.name}" 
+                        <img class="supply-image" src="${supply.imageSrc}" alt="${supply.name}"
                              onerror="this.classList.add('error')">
                         <div class="fallback-icon">📦</div>
                     </div>
@@ -1120,10 +1172,16 @@
             supplyQuantities[supplyId] = Math.max(1, supplyQuantities[supplyId] + change);
             const qtyDisplay = document.getElementById(`qty-${supplyId}`);
             qtyDisplay.textContent = supplyQuantities[supplyId];
-            
+
             // Add a pulse animation to show the change
             qtyDisplay.classList.add('pulse');
             setTimeout(() => qtyDisplay.classList.remove('pulse'), 1000);
+        }
+
+        function filterSupplies() {
+            const query = document.getElementById('supplySearch').value.toLowerCase();
+            const filtered = predefinedSupplies.filter(s => s.name.toLowerCase().includes(query));
+            renderSupplies(filtered);
         }
 
         // Create drop animation
@@ -1512,8 +1570,19 @@
             a.click();
             document.body.removeChild(a);
             window.URL.revokeObjectURL(url);
-            
+
             showToast('Orders exported successfully!');
+        }
+
+        function clearOrderHistory() {
+            if (!confirm('Are you sure you want to clear all order history?')) return;
+            orders = [];
+            orderCounter = 1;
+            localStorage.removeItem('cleaningOrders');
+            localStorage.removeItem('orderCounter');
+            populateCleanerFilter();
+            renderOrderHistory();
+            showToast('Order history cleared!');
         }
 
         // Enhanced toast notification with better animations
@@ -1538,6 +1607,24 @@
                     }
                 }, 400);
             }, 3000);
+        }
+
+        function toggleDarkMode() {
+            darkMode = !darkMode;
+            localStorage.setItem('darkMode', darkMode.toString());
+            applyDarkMode();
+        }
+
+        function applyDarkMode() {
+            const body = document.body;
+            const btn = document.querySelector('.dark-mode-toggle');
+            if (darkMode) {
+                body.classList.add('dark-mode');
+                if (btn) btn.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                if (btn) btn.textContent = '🌙';
+            }
         }
 
         // Close modal when clicking outside
