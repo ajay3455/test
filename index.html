@@ -3,6 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Modern cleaning supplies management platform with seamless ordering and inventory tracking">
+    <meta name="keywords" content="cleaning supplies, inventory, management, platform">
+    <meta name="author" content="Cleaning Platform">
+    <meta name="theme-color" content="#667eea">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiQ2xlYW5pbmcgU3VwcGxpZXMgUGxhdGZvcm0iLCJzaG9ydF9uYW1lIjoiQ2xlYW5TdXBwbHkiLCJzdGFydF91cmwiOiIuLyIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiM2NjdlZWEiLCJ0aGVtZV9jb2xvciI6IiM2NjdlZWEiLCJpY29ucyI6W3sic3JjIjoiZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE4yWnlCM2FXUjBhRDBpTVRJNElpQm9aV2xuYUhROUlqRXlPQ0lpSUhacFpYZENiM2c5SWpBZ01DQXhNamdnTVRJNElpQm1hV3hzUFNJalpEUjJZV1ZoUWlJK1BIQmhkR2dnWkQwaVRURTBOQ0E0TXpJZ1Jrb3hNVEl1TWpSVElqQWdNREF3UWtVOE9sWmhNMU0xUXpCak1GMUJRazFvU1RFeU1sWldRazFvU1VGQ1FqTnVVek5IUWtGRFEwUk5WMVl3UjBGaFVsQnVSMUpRVWxSWEZERWdNMUlEUmx4SEZSaFEwZGJkV0ZLZFZGcFJGQlBUMVJzWXpKU1V6ZEJaZz09IiwiaWNvbiI6MTI4fV19">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0iIzY2N2VlYSI+PHBhdGggZD0iTTE2IDJMMjYgN3YxOGwtMTAgNUw2IDI1VjdsMTAtNXoiLz48L3N2Zz4=">
+    
+    <!-- Preload critical fonts -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" as="style">
+    
     <title>Cleaning Supplies Platform</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -969,6 +983,26 @@
         .loading {
             opacity: 0.7;
             pointer-events: none;
+            position: relative;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: loadingSpinner 1s linear infinite;
+        }
+
+        @keyframes loadingSpinner {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .pulse {
@@ -986,9 +1020,181 @@
                 transform: scale(1);
             }
         }
+
+        /* Skeleton loading for better perceived performance */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Accessibility improvements */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Focus improvements */
+        *:focus {
+            outline: 2px solid #667eea;
+            outline-offset: 2px;
+        }
+
+        .supply-card:focus,
+        .cart-item:focus,
+        button:focus {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        /* Enhanced error states */
+        .error-state {
+            border-color: #e53e3e !important;
+            background-color: #fed7d7;
+        }
+
+        .error-message {
+            color: #e53e3e;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Success states */
+        .success-state {
+            border-color: #38a169 !important;
+            background-color: #c6f6d5;
+        }
+
+        /* Performance indicator */
+        .performance-indicator {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .performance-indicator.show {
+            opacity: 1;
+        }
+
+        /* Advanced search suggestions */
+        .search-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 0 0 10px 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 100;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .suggestion-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .suggestion-item:hover,
+        .suggestion-item:focus {
+            background-color: rgba(102, 126, 234, 0.1);
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Better mobile touch targets */
+        @media (max-width: 768px) {
+            button, .quantity-btn, .remove-btn {
+                min-height: 44px;
+                min-width: 44px;
+            }
+            
+            .cart-quantity-input {
+                min-height: 44px;
+            }
+            
+            .form-input, .select-input {
+                min-height: 44px;
+            }
+        }
+
+        /* Offline indicator */
+        .offline-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #e53e3e;
+            color: white;
+            text-align: center;
+            padding: 8px;
+            transform: translateY(-100%);
+            transition: transform 0.3s;
+            z-index: 2000;
+        }
+
+        .offline-indicator.show {
+            transform: translateY(0);
+        }
+
+        /* Enhanced cart animations */
+        @keyframes cartBounce {
+            0%, 20%, 53%, 80%, 100% {
+                transform: translate3d(0, 0, 0);
+            }
+            40%, 43% {
+                transform: translate3d(0, -8px, 0);
+            }
+            70% {
+                transform: translate3d(0, -4px, 0);
+            }
+            90% {
+                transform: translate3d(0, -2px, 0);
+            }
+        }
+
+        .cart-bounce {
+            animation: cartBounce 1s ease;
+        }
     </style>
 </head>
 <body>
+    <!-- Offline Indicator -->
+    <div class="offline-indicator" id="offlineIndicator">
+        ⚠️ You are currently offline. Some features may be limited.
+    </div>
+    
+    <!-- Performance Indicator -->
+    <div class="performance-indicator" id="performanceIndicator"></div>
+    
     <div class="container">
         <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙</button>
         <header class="header">
@@ -1005,7 +1211,13 @@
             <section class="supplies-section">
                 <h2 class="section-title">🧽 Available Supplies</h2>
 
-                <input type="text" id="supplySearch" class="form-input" placeholder="Search supplies..." oninput="filterSupplies()" style="margin-bottom: 20px;">
+                <div style="position: relative; margin-bottom: 20px;">
+                    <input type="text" id="supplySearch" class="form-input" placeholder="Search supplies..." 
+                           oninput="filterSupplies()" autocomplete="off" aria-label="Search supplies"
+                           aria-describedby="search-help">
+                    <div class="sr-only" id="search-help">Type to search through available cleaning supplies</div>
+                    <div class="search-suggestions" id="searchSuggestions" style="display: none;"></div>
+                </div>
 
                 <div class="supplies-grid" id="suppliesGrid">
                     <!-- Supply cards will be generated here -->
@@ -1117,6 +1329,16 @@
         let cart = [];
         let orders = JSON.parse(localStorage.getItem('cleaningOrders') || '[]');
         let orderCounter = parseInt(localStorage.getItem('orderCounter') || '1');
+        let isOnline = navigator.onLine;
+        let performanceMetrics = {
+            loadTime: 0,
+            cartOperations: 0,
+            searchOperations: 0
+        };
+        
+        // Advanced search state
+        let searchHistory = JSON.parse(localStorage.getItem('searchHistory') || '[]');
+        let searchTimeout = null;
 
         // Predefined supplies data
         const predefinedSupplies = [
@@ -1134,33 +1356,323 @@
         let darkMode = localStorage.getItem('darkMode') === 'true';
 
         function initializeApp() {
+            const startTime = performance.now();
+            
             predefinedSupplies.forEach(supply => {
                 supplyQuantities[supply.id] = 1;
             });
+            
+            // Load saved cart
+            loadCartFromStorage();
+            
             renderSupplies();
             updateOrderButton();
             populateCleanerFilter();
             applyDarkMode();
+            setupEventListeners();
+            initializePerformanceMonitoring();
+            setupOfflineHandling();
+            setupServiceWorker();
+            
+            performanceMetrics.loadTime = performance.now() - startTime;
+            updatePerformanceIndicator();
+            
+            // Show welcome message for new users
+            if (!localStorage.getItem('hasVisited')) {
+                setTimeout(() => {
+                    showToast('Welcome! 🎉 Use Ctrl+K to search, Ctrl+H for order history', 'success');
+                    localStorage.setItem('hasVisited', 'true');
+                }, 1000);
+            }
+        }
+
+        // Enhanced event listeners setup
+        function setupEventListeners() {
+            // Search enhancements
+            const searchInput = document.getElementById('supplySearch');
+            searchInput.addEventListener('input', handleSearchInput);
+            searchInput.addEventListener('focus', showSearchSuggestions);
+            searchInput.addEventListener('blur', hideSearchSuggestions);
+            
+            // Keyboard navigation
+            document.addEventListener('keydown', handleKeyboardNavigation);
+            
+            // Form validation
+            const customInputs = ['customItemName', 'customItemUnit', 'customItemQuantity'];
+            customInputs.forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.addEventListener('blur', validateInput);
+                    input.addEventListener('input', clearValidationErrors);
+                }
+            });
+        }
+
+        // Performance monitoring
+        function initializePerformanceMonitoring() {
+            // Monitor Core Web Vitals
+            if ('web-vital' in window) {
+                getCLS(console.log);
+                getFID(console.log);
+                getFCP(console.log);
+                getLCP(console.log);
+                getTTFB(console.log);
+            }
+        }
+
+        // Offline handling
+        function setupOfflineHandling() {
+            window.addEventListener('online', handleOnline);
+            window.addEventListener('offline', handleOffline);
+            updateOfflineIndicator();
+        }
+
+        function handleOnline() {
+            isOnline = true;
+            updateOfflineIndicator();
+            showToast('Connection restored! 🌐', 'success');
+        }
+
+        function handleOffline() {
+            isOnline = false;
+            updateOfflineIndicator();
+            showToast('You are now offline. Data will sync when connection is restored.', 'warning');
+        }
+
+        function updateOfflineIndicator() {
+            const indicator = document.getElementById('offlineIndicator');
+            if (indicator) {
+                indicator.classList.toggle('show', !isOnline);
+            }
+        }
+
+        // Service Worker setup for PWA
+        function setupServiceWorker() {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('data:text/javascript;base64,c2VsZi5hZGRFdmVudExpc3RlbmVyKCdpbnN0YWxsJywgZXZlbnQgPT4ge2NvbnNvbGUubG9nKCdTVyBpbnN0YWxsZWQnKTt9KTs=')
+                    .then(registration => {
+                        console.log('Service Worker registered successfully:', registration);
+                    })
+                    .catch(error => {
+                        console.log('Service Worker registration failed:', error);
+                    });
+            }
+        }
+
+        // Advanced search with suggestions
+        function handleSearchInput(event) {
+            clearTimeout(searchTimeout);
+            const query = event.target.value.toLowerCase().trim();
+            
+            searchTimeout = setTimeout(() => {
+                performanceMetrics.searchOperations++;
+                updatePerformanceIndicator();
+                
+                if (query) {
+                    addToSearchHistory(query);
+                    updateSearchSuggestions(query);
+                }
+                
+                filterSupplies();
+            }, 300); // Debounce search
+        }
+
+        function addToSearchHistory(query) {
+            if (!searchHistory.includes(query)) {
+                searchHistory.unshift(query);
+                searchHistory = searchHistory.slice(0, 10); // Keep only last 10 searches
+                localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+            }
+        }
+
+        function updateSearchSuggestions(query) {
+            const suggestions = document.getElementById('searchSuggestions');
+            if (!suggestions) return;
+            
+            const matches = predefinedSupplies
+                .filter(supply => supply.name.toLowerCase().includes(query))
+                .slice(0, 5);
+            
+            const historyMatches = searchHistory
+                .filter(term => term.includes(query) && term !== query)
+                .slice(0, 3);
+            
+            if (matches.length === 0 && historyMatches.length === 0) {
+                suggestions.style.display = 'none';
+                return;
+            }
+            
+            let html = '';
+            
+            if (historyMatches.length > 0) {
+                html += historyMatches.map(term => 
+                    `<div class="suggestion-item" onclick="selectSuggestion('${term}')">
+                        🕒 ${term}
+                    </div>`
+                ).join('');
+            }
+            
+            html += matches.map(supply => 
+                `<div class="suggestion-item" onclick="selectSuggestion('${supply.name}')">
+                    📦 ${supply.name}
+                </div>`
+            ).join('');
+            
+            suggestions.innerHTML = html;
+            suggestions.style.display = 'block';
+        }
+
+        function selectSuggestion(suggestion) {
+            document.getElementById('supplySearch').value = suggestion;
+            hideSearchSuggestions();
+            filterSupplies();
+        }
+
+        function showSearchSuggestions() {
+            const query = document.getElementById('supplySearch').value.toLowerCase().trim();
+            if (query) {
+                updateSearchSuggestions(query);
+            }
+        }
+
+        function hideSearchSuggestions() {
+            setTimeout(() => {
+                const suggestions = document.getElementById('searchSuggestions');
+                if (suggestions) {
+                    suggestions.style.display = 'none';
+                }
+            }, 200);
+        }
+
+        // Enhanced keyboard navigation
+        function handleKeyboardNavigation(event) {
+            if (event.key === 'Escape') {
+                closeOrderHistory();
+                hideSearchSuggestions();
+            }
+            
+            if (event.key === '/' && !event.target.matches('input, textarea')) {
+                event.preventDefault();
+                document.getElementById('supplySearch').focus();
+            }
+            
+            if (event.ctrlKey || event.metaKey) {
+                switch (event.key) {
+                    case 'k':
+                        event.preventDefault();
+                        document.getElementById('supplySearch').focus();
+                        break;
+                    case 'h':
+                        event.preventDefault();
+                        openOrderHistory();
+                        break;
+                }
+            }
+        }
+
+        // Input validation
+        function validateInput(event) {
+            const input = event.target;
+            const value = input.value.trim();
+            let isValid = true;
+            let errorMessage = '';
+            
+            switch (input.id) {
+                case 'customItemName':
+                    isValid = value.length >= 2;
+                    errorMessage = 'Item name must be at least 2 characters';
+                    break;
+                case 'customItemUnit':
+                    isValid = value.length >= 1;
+                    errorMessage = 'Unit is required';
+                    break;
+                case 'customItemQuantity':
+                    const qty = parseInt(value);
+                    isValid = qty >= 1 && qty <= 999;
+                    errorMessage = 'Quantity must be between 1 and 999';
+                    break;
+            }
+            
+            showValidationState(input, isValid, errorMessage);
+        }
+
+        function showValidationState(input, isValid, errorMessage) {
+            const container = input.parentElement;
+            
+            // Remove existing error messages
+            const existingError = container.querySelector('.error-message');
+            if (existingError) {
+                existingError.remove();
+            }
+            
+            // Update input styling
+            input.classList.remove('error-state', 'success-state');
+            if (input.value.trim()) {
+                input.classList.add(isValid ? 'success-state' : 'error-state');
+                
+                if (!isValid) {
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'error-message';
+                    errorDiv.innerHTML = `⚠️ ${errorMessage}`;
+                    container.appendChild(errorDiv);
+                }
+            }
+        }
+
+        function clearValidationErrors(event) {
+            const input = event.target;
+            const container = input.parentElement;
+            const existingError = container.querySelector('.error-message');
+            
+            if (existingError) {
+                existingError.remove();
+            }
+            
+            input.classList.remove('error-state');
+        }
+
+        // Performance indicator
+        function updatePerformanceIndicator() {
+            const indicator = document.getElementById('performanceIndicator');
+            if (!indicator) return;
+            
+            const metrics = [
+                `Load: ${performanceMetrics.loadTime.toFixed(1)}ms`,
+                `Cart: ${performanceMetrics.cartOperations}`,
+                `Search: ${performanceMetrics.searchOperations}`
+            ];
+            
+            indicator.textContent = metrics.join(' | ');
+            indicator.classList.add('show');
+            
+            setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 3000);
         }
 
         // Render predefined supplies
         function renderSupplies(list = predefinedSupplies) {
             const suppliesGrid = document.getElementById('suppliesGrid');
             suppliesGrid.innerHTML = list.map(supply => `
-                <div class="supply-card" data-supply-id="${supply.id}">
+                <div class="supply-card" data-supply-id="${supply.id}" tabindex="0" 
+                     role="article" aria-label="${supply.name} supply card">
                     <div class="supply-image-container">
-                        <img class="supply-image" src="${supply.imageSrc}" alt="${supply.name}"
-                             onerror="this.classList.add('error')">
-                        <div class="fallback-icon">📦</div>
+                        <img class="supply-image" src="${supply.imageSrc}" alt="${supply.name} product image"
+                             onerror="this.classList.add('error')" loading="lazy">
+                        <div class="fallback-icon" role="img" aria-label="Product placeholder">📦</div>
                     </div>
                     <div class="supply-name">${supply.name}</div>
                     <div class="supply-unit">per ${supply.unit}</div>
-                    <div class="quantity-controls">
-                        <button class="quantity-btn" onclick="changeQuantity('${supply.id}', -1)">−</button>
-                        <div class="quantity-display" id="qty-${supply.id}">${supplyQuantities[supply.id]}</div>
-                        <button class="quantity-btn" onclick="changeQuantity('${supply.id}', 1)">+</button>
+                    <div class="quantity-controls" role="group" aria-label="Quantity controls for ${supply.name}">
+                        <button class="quantity-btn" onclick="changeQuantity('${supply.id}', -1)" 
+                                aria-label="Decrease quantity" type="button">−</button>
+                        <div class="quantity-display" id="qty-${supply.id}" 
+                             aria-live="polite" aria-label="Current quantity">${supplyQuantities[supply.id]}</div>
+                        <button class="quantity-btn" onclick="changeQuantity('${supply.id}', 1)" 
+                                aria-label="Increase quantity" type="button">+</button>
                     </div>
-                    <button class="add-to-cart-btn" onclick="addToCart('${supply.id}', '${supply.name}', '${supply.unit}')">
+                    <button class="add-to-cart-btn" onclick="addToCart('${supply.id}', '${supply.name}', '${supply.unit}')"
+                            aria-label="Add ${supply.name} to cart" type="button">
                         Add to Cart
                     </button>
                 </div>
@@ -1225,6 +1737,8 @@
 
         // Add item to cart with animation
         function addToCart(id, name, unit, quantity = null) {
+            const startTime = performance.now();
+            
             const qty = quantity || supplyQuantities[id] || 1;
             const existingItem = cart.find(item => item.id === id);
             
@@ -1249,10 +1763,22 @@
                 setTimeout(() => button.classList.remove('loading'), 600);
             }
             
+            // Enhanced cart bounce animation
+            const cartSection = document.getElementById('cartSection');
+            cartSection.classList.add('cart-bounce');
+            setTimeout(() => cartSection.classList.remove('cart-bounce'), 1000);
+            
             setTimeout(() => {
                 renderCart();
                 updateOrderButton();
-                showToast(`${name} added to cart!`);
+                showToast(`${name} added to cart! 🛒`);
+                
+                // Update performance metrics
+                performanceMetrics.cartOperations++;
+                const operationTime = performance.now() - startTime;
+                if (operationTime > 50) { // Log slow operations
+                    console.warn(`Slow cart operation: ${operationTime.toFixed(2)}ms`);
+                }
             }, 300);
             
             // Reset custom form if it was a custom item
@@ -1261,20 +1787,96 @@
                 document.getElementById('customItemUnit').value = '';
                 document.getElementById('customItemQuantity').value = '1';
             }
+            
+            // Save cart to localStorage for persistence
+            saveCartToStorage();
         }
 
-        // Add custom item
+        // Save cart to localStorage
+        function saveCartToStorage() {
+            try {
+                localStorage.setItem('currentCart', JSON.stringify(cart));
+            } catch (error) {
+                console.warn('Could not save cart to localStorage:', error);
+                showToast('Warning: Cart data may not persist across sessions', 'warning');
+            }
+        }
+
+        // Load cart from localStorage
+        function loadCartFromStorage() {
+            try {
+                const savedCart = localStorage.getItem('currentCart');
+                if (savedCart) {
+                    cart = JSON.parse(savedCart);
+                    renderCart();
+                    updateOrderButton();
+                }
+            } catch (error) {
+                console.warn('Could not load cart from localStorage:', error);
+            }
+        }
+
+        // Add custom item with enhanced validation
         function addCustomItem() {
-            const name = document.getElementById('customItemName').value.trim();
-            const unit = document.getElementById('customItemUnit').value.trim();
-            const quantity = parseInt(document.getElementById('customItemQuantity').value);
+            const nameInput = document.getElementById('customItemName');
+            const unitInput = document.getElementById('customItemUnit');
+            const quantityInput = document.getElementById('customItemQuantity');
             
-            if (!name || !unit || quantity < 1) {
-                showToast('Please fill in all fields with valid values', 'error');
+            const name = nameInput.value.trim();
+            const unit = unitInput.value.trim();
+            const quantity = parseInt(quantityInput.value);
+            
+            // Enhanced validation
+            let isValid = true;
+            const errors = [];
+            
+            if (!name || name.length < 2) {
+                errors.push('Item name must be at least 2 characters');
+                nameInput.classList.add('error-state');
+                isValid = false;
+            }
+            
+            if (!unit || unit.length < 1) {
+                errors.push('Unit is required');
+                unitInput.classList.add('error-state');
+                isValid = false;
+            }
+            
+            if (!quantity || quantity < 1 || quantity > 999) {
+                errors.push('Quantity must be between 1 and 999');
+                quantityInput.classList.add('error-state');
+                isValid = false;
+            }
+            
+            if (!isValid) {
+                showToast(`Validation errors: ${errors.join(', ')}`, 'error');
                 return;
             }
             
-            const customId = `custom-${Date.now()}`;
+            // Check for duplicates
+            const existingCustomItem = cart.find(item => 
+                item.name.toLowerCase() === name.toLowerCase() && 
+                item.unit.toLowerCase() === unit.toLowerCase()
+            );
+            
+            if (existingCustomItem) {
+                const shouldUpdate = confirm(`"${name}" already exists in cart. Add ${quantity} more?`);
+                if (shouldUpdate) {
+                    existingCustomItem.quantity += quantity;
+                    renderCart();
+                    updateOrderButton();
+                    saveCartToStorage();
+                    showToast(`Updated ${name} quantity in cart! 📝`);
+                    
+                    // Reset form
+                    nameInput.value = '';
+                    unitInput.value = '';
+                    quantityInput.value = '1';
+                }
+                return;
+            }
+            
+            const customId = `custom-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
             addToCart(customId, name, unit, quantity);
         }
 
@@ -1316,21 +1918,34 @@
             }
         }
 
-        // Remove item from cart
+        // Remove item from cart with confirmation
         function removeFromCart(id) {
+            const item = cart.find(item => item.id === id);
+            if (!item) return;
+            
+            const shouldRemove = confirm(`Remove "${item.name}" from cart?`);
+            if (!shouldRemove) return;
+            
             cart = cart.filter(item => item.id !== id);
             renderCart();
             updateOrderButton();
-            showToast('Item removed from cart');
+            saveCartToStorage();
+            showToast(`${item.name} removed from cart 🗑️`);
         }
 
         // Clear cart with confirmation
         function clearCart() {
-            if (confirm('Are you sure you want to clear your cart?')) {
+            if (cart.length === 0) {
+                showToast('Cart is already empty', 'warning');
+                return;
+            }
+            
+            if (confirm(`Are you sure you want to clear all ${cart.length} items from your cart?`)) {
                 cart = [];
                 renderCart();
                 updateOrderButton();
-                showToast('Cart cleared');
+                saveCartToStorage();
+                showToast('Cart cleared successfully 🧹');
             }
         }
 
