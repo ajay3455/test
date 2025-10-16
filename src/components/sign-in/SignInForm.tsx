@@ -1,18 +1,25 @@
-import { forwardRef, useEffect, useMemo, useState } from 'react';
+// 🌐 SECTION A: Header & Config
+// FILE: src/components/sign-in/SignInForm.tsx
+// LAST UPDATED: 2025-10-16
+
+// 📝 A1: Imports
+import { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useGuardProfile } from '../../../context/GuardProfileContext';
-import { supabase } from '../../../lib/supabaseClient';
-import type { PreAuthorizedContractor } from '../../../types';
-import { Button } from '../../ui/Button';
-import { Card, CardDescription, CardHeader, CardTitle } from '../../ui/Card';
+import { useGuardProfile } from '../../context/GuardProfileContext';
+import { supabase } from '../../lib/supabaseClient';
+import type { PreAuthorizedContractor } from '../../types';
+import { Button } from '../ui/Button';
+import { Card, CardDescription, CardHeader, CardTitle } from '../ui/Card';
 import { BasicInfoSection } from './form-sections/BasicInfoSection';
 import { KeysSection } from './form-sections/KeysSection';
 import { NotesSection } from './form-sections/NotesSection';
 import { ParkingSection } from './form-sections/ParkingSection';
 import { PurposeOfVisitSection } from './form-sections/PurposeOfVisitSection';
 
+// 📝 A2: Constants
 const DRAFT_KEY = 'security-hub-mini:sign-in-draft';
 
+// ⚙️ SECTION B: Type Definitions
 type FormState = {
   name: string;
   company: string;
@@ -30,6 +37,7 @@ type FormState = {
   preAuthorizedId: string | null;
 };
 
+// ⚙️ SECTION C: Initial State
 const emptyForm: FormState = {
   name: '',
   company: '',
@@ -47,17 +55,21 @@ const emptyForm: FormState = {
   preAuthorizedId: null
 };
 
+// 🛠 SECTION D: Utility Functions
 function sanitizeSearchTerm(value: string) {
   return value.replace(/[%_]/g, '').trim();
 }
 
+// 🎨 SECTION E: Component Definition
 export function SignInForm({ onSubmitted }: { onSubmitted: () => void }) {
   const { profile } = useGuardProfile();
   const [form, setForm] = useState<FormState>(emptyForm);
   const [draftRestored, setDraftRestored] = useState(false);
   const [suggestions, setSuggestions] = useState<PreAuthorizedContractor[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedContractor, setSelectedContractor] = useState<PreAuthorizedContractor | null>(null);
+  const [selectedContractor, setSelectedContractor] = useState<PreAuthorizedContractor | null>(
+    null
+  );
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
