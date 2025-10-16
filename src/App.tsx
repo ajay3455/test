@@ -1,0 +1,60 @@
+import { NavLink, Route, Routes } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+import { GuardProfileProvider } from './context/GuardProfileContext';
+import { DashboardPage } from './pages/DashboardPage';
+import { PreAuthorizedPage } from './pages/PreAuthorizedPage';
+import { GuardProfileSettings } from './components/GuardProfileSettings';
+
+const navigation = [
+  { to: '/', label: 'Contractor Log' },
+  { to: '/pre-authorized', label: 'Pre-Authorized Directory' }
+];
+
+export default function App() {
+  return (
+    <GuardProfileProvider>
+      <div className="min-h-screen bg-slate-950 text-slate-100">
+        <div aria-hidden className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_top,#1f3b5b33,transparent_60%)]" />
+        <Toaster position="top-right" toastOptions={{ style: { background: '#0f172a', color: '#e2e8f0' } }} />
+        <header className="relative border-b border-slate-800 bg-slate-950/90 backdrop-blur">
+          <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-5 md:flex-row md:items-center md:justify-between">
+            <div>
+              <p className="text-xs font-medium uppercase tracking-[0.35em] text-brand-muted">
+                Security Hub
+              </p>
+              <h1 className="text-3xl font-semibold text-white">Security Hub Mini</h1>
+              <p className="mt-1 text-sm text-slate-400">
+                Contractor sign-in backup system for fast, reliable front-desk workflows.
+              </p>
+            </div>
+            <GuardProfileSettings />
+          </div>
+          <nav className="border-t border-slate-800/60">
+            <div className="mx-auto flex max-w-7xl gap-2 px-6 py-3">
+              {navigation.map((item) => (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  end
+                  className={({ isActive }) =>
+                    `rounded-full px-4 py-2 text-sm font-medium transition hover:bg-slate-800/80 ${
+                      isActive ? 'bg-brand-light text-white shadow-soft' : 'text-slate-400'
+                    }`
+                  }
+                >
+                  {item.label}
+                </NavLink>
+              ))}
+            </div>
+          </nav>
+        </header>
+        <main className="relative mx-auto max-w-7xl px-6 py-8">
+          <Routes>
+            <Route path="/" element={<DashboardPage />} />
+            <Route path="/pre-authorized" element={<PreAuthorizedPage />} />
+          </Routes>
+        </main>
+      </div>
+    </GuardProfileProvider>
+  );
+}
