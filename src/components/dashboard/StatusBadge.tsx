@@ -3,23 +3,23 @@ type StatusType = 'active' | 'pending' | 'declined' | 'signed_out' | 'overdue';
 const STYLES: Record<StatusType, { label: string; className: string }> = {
   active: {
     label: 'Approved',
-    className: 'bg-green-500/10 text-green-300 border-green-500/40'
+    className: 'bg-green-100 text-green-800 border-green-200'
   },
   pending: {
-    label: 'Pending Approval',
-    className: 'bg-yellow-500/10 text-yellow-200 border-yellow-500/40'
+    label: 'Pending',
+    className: 'bg-yellow-100 text-yellow-800 border-yellow-200'
   },
   declined: {
     label: 'Declined',
-    className: 'bg-rose-500/10 text-rose-200 border-rose-500/40'
+    className: 'bg-red-100 text-red-800 border-red-200'
   },
   signed_out: {
     label: 'Signed Out',
-    className: 'bg-slate-500/10 text-slate-300 border-slate-500/40'
+    className: 'bg-slate-100 text-slate-600 border-slate-200'
   },
   overdue: {
     label: 'Overdue',
-    className: 'bg-rose-500/20 text-rose-200 border-rose-500/60 animate-pulse'
+    className: 'bg-red-100 text-red-800 border-red-200 animate-pulse'
   }
 };
 
