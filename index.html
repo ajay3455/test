@@ -3,1650 +3,490 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cleaning Supplies Platform</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
-        :root {
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            --glass-bg: rgba(255, 255, 255, 0.15);
-            --glass-border: rgba(255, 255, 255, 0.2);
-            --dark-glass: rgba(0, 0, 0, 0.1);
-            --text-primary: #2d3748;
-            --text-secondary: #718096;
-            --white: #ffffff;
-            --shadow-soft: 0 20px 40px rgba(0, 0, 0, 0.1);
-            --shadow-medium: 0 25px 50px rgba(0, 0, 0, 0.15);
-            --shadow-hard: 0 30px 60px rgba(0, 0, 0, 0.2);
-            --border-radius: 16px;
-            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--primary-gradient);
-            min-height: 100vh;
-            color: var(--text-primary);
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        body.dark-mode {
-            --primary-gradient: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
-            --text-primary: #e2e8f0;
-            --text-secondary: #cbd5e0;
-            --white: #2d3748;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 30px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-            color: white;
-            position: relative;
-        }
-
-        .header h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin-bottom: 16px;
-            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            background: linear-gradient(135deg, #ffffff 0%, #f0f8ff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: -1px;
-        }
-
-        .header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            font-weight: 400;
-        }
-
-        .header-decoration {
-            position: absolute;
-            top: -20px;
-            right: 20%;
-            font-size: 4rem;
-            opacity: 0.1;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(5deg); }
-        }
-
-        .order-history-btn {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            color: white;
-            border-radius: var(--border-radius);
-            padding: 18px 32px;
-            cursor: pointer;
-            font-size: 1.1rem;
-            font-weight: 600;
-            width: 100%;
-            transition: var(--transition);
-            margin-bottom: 30px;
-            box-shadow: var(--shadow-soft);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .order-history-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .order-history-btn:hover::before {
-            left: 100%;
-        }
-
-        .order-history-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-medium);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .dark-mode-toggle {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            color: white;
-            border-radius: var(--border-radius);
-            padding: 8px 12px;
-            cursor: pointer;
-            font-size: 1.1rem;
-            transition: var(--transition);
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            z-index: 10;
-        }
-
-        .dark-mode-toggle:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-medium);
-        }
-
-        .main-grid {
-            display: grid;
-            grid-template-columns: 1fr 400px;
-            gap: 40px;
-            margin-bottom: 30px;
-        }
-
-        .supplies-section {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--border-radius);
-            padding: 35px;
-            box-shadow: var(--shadow-soft);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .supplies-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
-        }
-
-        .section-title {
-            font-size: 1.8rem;
-            color: white;
-            margin-bottom: 30px;
-            font-weight: 600;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            position: relative;
-            padding-left: 20px;
-        }
-
-        .section-title::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 4px;
-            height: 30px;
-            background: var(--success-gradient);
-            border-radius: 2px;
-        }
-
-        .supplies-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 25px;
-            margin-bottom: 40px;
-        }
-
-        .supply-card {
-            background: var(--white);
-            border-radius: var(--border-radius);
-            padding: 25px;
-            text-align: center;
-            transition: var(--transition);
-            box-shadow: var(--shadow-soft);
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-            border: 1px solid rgba(0,0,0,0.05);
-        }
-
-        .supply-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: var(--success-gradient);
-            transform: scaleX(0);
-            transition: transform 0.3s ease;
-        }
-
-        .supply-card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .supply-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: var(--shadow-medium);
-            border-color: rgba(102, 126, 234, 0.2);
-        }
-
-        .supply-image-container {
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        .supply-image {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 12px;
-            margin: 0 auto;
-            display: block;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-            transition: var(--transition);
-        }
-
-        .supply-card:hover .supply-image {
-            transform: scale(1.1) rotate(2deg);
-        }
-
-        .supply-image.error {
-            display: none;
-        }
-
-        .supply-image.error + .fallback-icon {
-            display: flex;
-        }
-
-        .fallback-icon {
-            display: none;
-            width: 100px;
-            height: 100px;
-            background: var(--primary-gradient);
-            border-radius: 12px;
-            margin: 0 auto;
-            position: relative;
-            color: white;
-            font-size: 2.5rem;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-        }
-
-        .supply-name {
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--text-primary);
-            font-size: 1.1rem;
-        }
-
-        .supply-unit {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-            font-weight: 500;
-        }
-
-        .quantity-controls {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .quantity-btn {
-            background: var(--primary-gradient);
-            color: white;
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-            font-weight: 600;
-        }
-
-        .quantity-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-        }
-
-        .quantity-btn:active {
-            transform: scale(0.95);
-        }
-
-        .quantity-display {
-            min-width: 50px;
-            text-align: center;
-            font-weight: 700;
-            color: var(--primary-gradient);
-            font-size: 1.2rem;
-            background: rgba(102, 126, 234, 0.1);
-            padding: 8px 12px;
-            border-radius: 8px;
-        }
-
-        .add-to-cart-btn {
-            background: var(--success-gradient);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: var(--transition);
-            width: 100%;
-            font-size: 1rem;
-            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .add-to-cart-btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.3s, height 0.3s;
-        }
-
-        .add-to-cart-btn:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        .add-to-cart-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4);
-        }
-
-        .custom-item-form {
-            background: var(--white);
-            border-radius: var(--border-radius);
-            padding: 30px;
-            border: 2px dashed rgba(102, 126, 234, 0.3);
-            transition: var(--transition);
-            box-shadow: var(--shadow-soft);
-        }
-
-        .custom-item-form:hover {
-            border-color: rgba(102, 126, 234, 0.5);
-            transform: translateY(-2px);
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--text-primary);
-            font-size: 0.95rem;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 14px 16px;
-            border: 2px solid rgba(0,0,0,0.1);
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: var(--transition);
-            background: rgba(255, 255, 255, 0.8);
-            font-family: inherit;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
-            background: white;
-        }
-
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-        }
-
-        .cart-section, .order-section {
-            background: var(--white);
-            border-radius: var(--border-radius);
-            padding: 30px;
-            box-shadow: var(--shadow-soft);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cart-section::before, .order-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: var(--secondary-gradient);
-        }
-
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            transition: var(--transition);
-            animation: slideInFromRight 0.5s ease;
-        }
-
-        @keyframes slideInFromRight {
-            from {
-                opacity: 0;
-                transform: translateX(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .cart-item:hover {
-            background: rgba(102, 126, 234, 0.05);
-            padding-left: 10px;
-            border-radius: 8px;
-        }
-
-        .cart-item:last-child {
-            border-bottom: none;
-        }
-
-        .cart-item-info {
-            flex: 1;
-        }
-
-        .cart-item-name {
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 4px;
-        }
-
-        .cart-item-unit {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .cart-item-controls {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .cart-quantity-input {
-            width: 70px;
-            padding: 8px;
-            border: 2px solid rgba(0,0,0,0.1);
-            border-radius: 8px;
-            text-align: center;
-            font-weight: 600;
-            transition: var(--transition);
-        }
-
-        .cart-quantity-input:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-            outline: none;
-        }
-
-        .remove-btn {
-            background: var(--secondary-gradient);
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            font-weight: 600;
-            transition: var(--transition);
-        }
-
-        .remove-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3);
-        }
-
-        .clear-cart-btn {
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 10px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 20px;
-            font-weight: 600;
-            transition: var(--transition);
-            box-shadow: 0 4px 15px rgba(255, 154, 158, 0.3);
-        }
-
-        .clear-cart-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 154, 158, 0.4);
-        }
-
-        .empty-cart {
-            text-align: center;
-            color: var(--text-secondary);
-            font-style: italic;
-            padding: 30px 0;
-            background: rgba(102, 126, 234, 0.05);
-            border-radius: 10px;
-            border: 2px dashed rgba(102, 126, 234, 0.2);
-        }
-
-        .select-input {
-            width: 100%;
-            padding: 14px 16px;
-            border: 2px solid rgba(0,0,0,0.1);
-            border-radius: 10px;
-            font-size: 1rem;
-            background: white;
-            margin-bottom: 15px;
-            transition: var(--transition);
-            font-family: inherit;
-        }
-
-        .select-input:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
-            outline: none;
-        }
-
-        .custom-cleaner-input {
-            display: none;
-            margin-top: 15px;
-        }
-
-        .radio-group {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .radio-option {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            padding: 12px 16px;
-            border-radius: 10px;
-            transition: var(--transition);
-            border: 2px solid rgba(0,0,0,0.1);
-            flex: 1;
-            justify-content: center;
-            background: rgba(255, 255, 255, 0.5);
-        }
-
-        .radio-option:hover {
-            background: rgba(102, 126, 234, 0.1);
-            border-color: rgba(102, 126, 234, 0.3);
-        }
-
-        .radio-option input[type="radio"] {
-            margin: 0;
-            transform: scale(1.2);
-        }
-
-        .radio-option input[type="radio"]:checked + span {
-            color: #667eea;
-            font-weight: 600;
-        }
-
-        .place-order-btn {
-            background: var(--primary-gradient);
-            color: white;
-            border: none;
-            padding: 18px 32px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 1.1rem;
-            font-weight: 600;
-            width: 100%;
-            transition: var(--transition);
-            margin-top: 20px;
-            box-shadow: var(--shadow-soft);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .place-order-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .place-order-btn:hover:not(:disabled)::before {
-            left: 100%;
-        }
-
-        .place-order-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-medium);
-        }
-
-        .place-order-btn:disabled {
-            background: linear-gradient(135deg, #cbd5e0 0%, #e2e8f0 100%);
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        /* Drop Animation Styles */
-        .dropping-item {
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            width: 60px;
-            height: 60px;
-            background: var(--success-gradient);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            font-size: 0.8rem;
-            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4);
-            animation: dropToCart 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-        }
-
-        @keyframes dropToCart {
-            0% {
-                transform: scale(1) rotate(0deg);
-                opacity: 1;
-            }
-            20% {
-                transform: scale(1.1) rotate(5deg);
-            }
-            60% {
-                transform: scale(0.9) rotate(-2deg);
-            }
-            100% {
-                transform: scale(0.3) rotate(0deg);
-                opacity: 0;
-            }
-        }
-
-        .cart-section.receiving {
-            animation: cartReceive 0.6s ease;
-            background: linear-gradient(135deg, rgba(79, 172, 254, 0.1) 0%, rgba(0, 242, 254, 0.1) 100%);
-        }
-
-        @keyframes cartReceive {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.02);
-            }
-        }
-
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            animation: fadeIn 0.4s ease;
-        }
-
-        .modal.show {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-content {
-            background: var(--white);
-            border-radius: var(--border-radius);
-            padding: 40px;
-            max-width: 95vw;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-            animation: modalSlideIn 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            box-shadow: var(--shadow-hard);
-        }
-
-        @keyframes modalSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-30px) scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            border-bottom: 2px solid rgba(0,0,0,0.05);
-            padding-bottom: 20px;
-        }
-
-        .modal-title {
-            font-size: 2rem;
-            color: var(--text-primary);
-            font-weight: 700;
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 2rem;
-            cursor: pointer;
-            color: var(--text-secondary);
-            padding: 8px;
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
-        }
-
-        .close-btn:hover {
-            background: rgba(102, 126, 234, 0.1);
-            color: var(--text-primary);
-            transform: scale(1.1);
-        }
-
-        .filter-section {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-
-        .export-btn {
-            background: var(--success-gradient);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: var(--transition);
-            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
-        }
-
-        .export-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4);
-        }
-
-        .clear-history-btn {
-            background: linear-gradient(135deg, #f56565 0%, #ed64a6 100%);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: var(--transition);
-            box-shadow: 0 4px 15px rgba(245, 101, 101, 0.3);
-        }
-
-        .clear-history-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(245, 101, 101, 0.4);
-        }
-
-        .order-item {
-            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-            border-radius: var(--border-radius);
-            padding: 25px;
-            margin-bottom: 20px;
-            border-left: 4px solid transparent;
-            border-image: var(--primary-gradient) 1;
-            transition: var(--transition);
-            box-shadow: var(--shadow-soft);
-        }
-
-        .order-item:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-medium);
-        }
-
-        .toast {
-            position: fixed;
-            top: 30px;
-            right: 30px;
-            background: var(--success-gradient);
-            color: white;
-            padding: 20px 25px;
-            border-radius: 12px;
-            box-shadow: var(--shadow-medium);
-            z-index: 2000;
-            animation: toastSlideIn 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            max-width: 400px;
-            font-weight: 600;
-            backdrop-filter: blur(20px);
-        }
-
-        @keyframes toastSlideIn {
-            from {
-                opacity: 0;
-                transform: translateX(100%) scale(0.8);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0) scale(1);
-            }
-        }
-
-        .toast.error {
-            background: var(--secondary-gradient);
-        }
-
-        .toast.warning {
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
-        }
-
-        /* Responsive Design */
-        @media (max-width: 1024px) {
-            .main-grid {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-            
-            .sidebar {
-                order: -1;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 20px;
-            }
-            
-            .header h1 {
-                font-size: 2.5rem;
-            }
-            
-            .supplies-grid {
-                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-                gap: 20px;
-            }
-            
-            .filter-section {
-                flex-direction: column;
-            }
-            
-            .modal-content {
-                padding: 25px;
-                margin: 15px;
-            }
-            
-            .radio-group {
-                flex-direction: column;
-                gap: 15px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .supplies-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .toast {
-                top: 15px;
-                right: 15px;
-                left: 15px;
-                max-width: none;
-            }
-            
-            .header h1 {
-                font-size: 2rem;
-            }
-        }
-
-        /* Loading animation for better UX */
-        .loading {
-            opacity: 0.7;
-            pointer-events: none;
-        }
-
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
-    </style>
+    <meta name="description" content="Professional security services including 24/7 monitoring, security consulting, installation services, and risk assessment. Protecting what matters most.">
+    <meta name="keywords" content="security, security services, 24/7 monitoring, security consulting, risk assessment, security installation">
+    <title>SecureGuard - Professional Security Solutions</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙</button>
-        <header class="header">
-            <div class="header-decoration">🧽</div>
-            <h1>Cleaning Supplies Platform</h1>
-            <p>Experience seamless supply management with modern design</p>
-        </header>
-
-        <button class="order-history-btn" onclick="openOrderHistory()">
-            📋 View Order History
-        </button>
-
-        <div class="main-grid">
-            <section class="supplies-section">
-                <h2 class="section-title">🧽 Available Supplies</h2>
-
-                <input type="text" id="supplySearch" class="form-input" placeholder="Search supplies..." oninput="filterSupplies()" style="margin-bottom: 20px;">
-
-                <div class="supplies-grid" id="suppliesGrid">
-                    <!-- Supply cards will be generated here -->
-                </div>
-
-                <div class="custom-item-form">
-                    <h3 style="margin-bottom: 20px; color: var(--text-primary); font-weight: 600;">➕ Add Custom Item</h3>
-                    <div class="form-group">
-                        <label class="form-label" for="customItemName">Item Name</label>
-                        <input type="text" id="customItemName" class="form-input" placeholder="Enter item name">
+    <header class="header">
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-content">
+                    <div class="logo">
+                        <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L4 6V11C4 16.55 7.84 21.74 13 23C18.16 21.74 22 16.55 22 11V6L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M9 12L11 14L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span class="logo-text">SecureGuard</span>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label" for="customItemUnit">Unit</label>
-                        <input type="text" id="customItemUnit" class="form-input" placeholder="e.g., bottle, box, pack">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="customItemQuantity">Quantity</label>
-                        <input type="number" id="customItemQuantity" class="form-input" min="1" value="1">
-                    </div>
-                    <button class="add-to-cart-btn" onclick="addCustomItem()">Add to Cart</button>
-                </div>
-            </section>
-
-            <aside class="sidebar">
-                <section class="cart-section" id="cartSection">
-                    <h2 class="section-title">🛒 Cart</h2>
-                    <div id="cartItems">
-                        <div class="empty-cart">Your cart is empty</div>
-                    </div>
-                    <button class="clear-cart-btn" onclick="clearCart()" style="display: none;" id="clearCartBtn">Clear Cart</button>
-                </section>
-
-                <section class="order-section">
-                    <h2 class="section-title">📦 Place Order</h2>
-                    
-                    <div class="form-group">
-                        <label class="form-label" for="cleanerSelect">Select Cleaner</label>
-                        <select id="cleanerSelect" class="select-input" onchange="handleCleanerChange()">
-                            <option value="">Select a Cleaner...</option>
-                            <option value="Alex Johnson">Alex Johnson</option>
-                            <option value="Maria Lopez">Maria Lopez</option>
-                            <option value="Zara Patel">Zara Patel</option>
-                            <option value="David Chen">David Chen</option>
-                            <option value="Sarah Williams">Sarah Williams</option>
-                            <option value="Michael Brown">Michael Brown</option>
-                            <option value="Emma Davis">Emma Davis</option>
-                            <option value="others">Others (Type Name)</option>
-                        </select>
-                        <input type="text" id="customCleanerName" class="form-input custom-cleaner-input" placeholder="Enter cleaner name">
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Locker Type</label>
-                        <div class="radio-group">
-                            <label class="radio-option">
-                                <input type="radio" name="lockerType" value="residential" checked>
-                                <span>🏠 Residential</span>
-                            </label>
-                            <label class="radio-option">
-                                <input type="radio" name="lockerType" value="commercial">
-                                <span>🏢 Commercial</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label" for="orderComments">Comments (Optional)</label>
-                        <textarea id="orderComments" class="form-input" placeholder="Any special instructions..." rows="3"></textarea>
-                    </div>
-
-                    <button class="place-order-btn" id="placeOrderBtn" onclick="placeOrder()" disabled>
-                        Place Order
+                    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
                     </button>
-                </section>
-            </aside>
-        </div>
-    </div>
-
-    <!-- Order History Modal -->
-    <div class="modal" id="orderHistoryModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">📋 Order History</h2>
-                <button class="close-btn" onclick="closeOrderHistory()">&times;</button>
-            </div>
-            
-            <div class="filter-section">
-                <select id="cleanerFilter" class="select-input" style="width: auto; min-width: 150px;" onchange="filterOrders()">
-                    <option value="">All Cleaners</option>
-                </select>
-                <select id="lockerFilter" class="select-input" style="width: auto; min-width: 150px;" onchange="filterOrders()">
-                    <option value="">All Locker Types</option>
-                    <option value="residential">Residential</option>
-                    <option value="commercial">Commercial</option>
-                </select>
-                <input type="text" id="itemFilter" class="form-input" style="width: auto; min-width: 200px;" placeholder="Filter by item name..." oninput="filterOrders()">
-                <button class="export-btn" onclick="exportToCSV()">📄 Export CSV</button>
-                <button class="clear-history-btn" onclick="clearOrderHistory()">🗑️ Clear History</button>
-            </div>
-            
-            <div id="orderHistoryList">
-                <!-- Order history will be displayed here -->
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Application state
-        let cart = [];
-        let orders = JSON.parse(localStorage.getItem('cleaningOrders') || '[]');
-        let orderCounter = parseInt(localStorage.getItem('orderCounter') || '1');
-
-        // Predefined supplies data
-        const predefinedSupplies = [
-            { id: 'paperTowels', name: 'Paper Towels', unit: 'roll', imageSrc: 'https://i.postimg.cc/3rzyvZyP/Chat-GPT-Image-Jun-2-2025-11-26-57-AM.png' },
-            { id: 'toiletPaper', name: 'Toilet Paper', unit: 'roll', imageSrc: 'https://i.postimg.cc/7Y75MT0b/Chat-GPT-Image-Jun-2-2025-11-40-01-AM.png' },
-            { id: 'plasticBags', name: 'Plastic Bags', unit: 'roll', imageSrc: 'https://i.postimg.cc/3xFWz5LT/Garbage-Bag-with-Soft-Lighting.png' },
-            { id: 'gloves', name: 'Disposable Gloves', unit: 'box', imageSrc: 'https://i.postimg.cc/Kc1kjWYP/Chat-GPT-Image-Jun-2-2025-11-48-44-AM.png' },
-            { id: 'soap', name: 'Hand Soap', unit: 'bottle', imageSrc: 'https://i.postimg.cc/jCVrS2SF/Chat-GPT-Image-Jun-2-2025-11-45-17-AM.png' }
-        ];
-
-        // Supply quantities
-        let supplyQuantities = {};
-
-        // Initialize the application
-        let darkMode = localStorage.getItem('darkMode') === 'true';
-
-        function initializeApp() {
-            predefinedSupplies.forEach(supply => {
-                supplyQuantities[supply.id] = 1;
-            });
-            renderSupplies();
-            updateOrderButton();
-            populateCleanerFilter();
-            applyDarkMode();
-        }
-
-        // Render predefined supplies
-        function renderSupplies(list = predefinedSupplies) {
-            const suppliesGrid = document.getElementById('suppliesGrid');
-            suppliesGrid.innerHTML = list.map(supply => `
-                <div class="supply-card" data-supply-id="${supply.id}">
-                    <div class="supply-image-container">
-                        <img class="supply-image" src="${supply.imageSrc}" alt="${supply.name}"
-                             onerror="this.classList.add('error')">
-                        <div class="fallback-icon">📦</div>
-                    </div>
-                    <div class="supply-name">${supply.name}</div>
-                    <div class="supply-unit">per ${supply.unit}</div>
-                    <div class="quantity-controls">
-                        <button class="quantity-btn" onclick="changeQuantity('${supply.id}', -1)">−</button>
-                        <div class="quantity-display" id="qty-${supply.id}">${supplyQuantities[supply.id]}</div>
-                        <button class="quantity-btn" onclick="changeQuantity('${supply.id}', 1)">+</button>
-                    </div>
-                    <button class="add-to-cart-btn" onclick="addToCart('${supply.id}', '${supply.name}', '${supply.unit}')">
-                        Add to Cart
-                    </button>
+                    <ul class="nav-menu">
+                        <li><a href="#home" class="nav-link">Home</a></li>
+                        <li><a href="#services" class="nav-link">Services</a></li>
+                        <li><a href="#features" class="nav-link">Features</a></li>
+                        <li><a href="#about" class="nav-link">About</a></li>
+                        <li><a href="#contact" class="nav-link nav-link-cta">Contact Us</a></li>
+                    </ul>
                 </div>
-            `).join('');
-        }
+            </div>
+        </nav>
+    </header>
 
-        // Change quantity for predefined supplies
-        function changeQuantity(supplyId, change) {
-            supplyQuantities[supplyId] = Math.max(1, supplyQuantities[supplyId] + change);
-            const qtyDisplay = document.getElementById(`qty-${supplyId}`);
-            qtyDisplay.textContent = supplyQuantities[supplyId];
-
-            // Add a pulse animation to show the change
-            qtyDisplay.classList.add('pulse');
-            setTimeout(() => qtyDisplay.classList.remove('pulse'), 1000);
-        }
-
-        function filterSupplies() {
-            const query = document.getElementById('supplySearch').value.toLowerCase();
-            const filtered = predefinedSupplies.filter(s => s.name.toLowerCase().includes(query));
-            renderSupplies(filtered);
-        }
-
-        // Create drop animation
-        function createDropAnimation(sourceElement, itemName) {
-            const dropItem = document.createElement('div');
-            dropItem.className = 'dropping-item';
-            dropItem.textContent = itemName.substring(0, 3);
-            
-            // Get source position
-            const sourceRect = sourceElement.getBoundingClientRect();
-            const cartSection = document.getElementById('cartSection');
-            const cartRect = cartSection.getBoundingClientRect();
-            
-            // Set initial position
-            dropItem.style.left = sourceRect.left + sourceRect.width / 2 - 30 + 'px';
-            dropItem.style.top = sourceRect.top + sourceRect.height / 2 - 30 + 'px';
-            
-            document.body.appendChild(dropItem);
-            
-            // Calculate path to cart
-            const deltaX = cartRect.left + cartRect.width / 2 - (sourceRect.left + sourceRect.width / 2);
-            const deltaY = cartRect.top + cartRect.height / 2 - (sourceRect.top + sourceRect.height / 2);
-            
-            // Apply the drop animation with physics
-            setTimeout(() => {
-                dropItem.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(0.3)`;
-                dropItem.style.opacity = '0';
-            }, 100);
-            
-            // Add receiving animation to cart
-            cartSection.classList.add('receiving');
-            setTimeout(() => cartSection.classList.remove('receiving'), 600);
-            
-            // Remove element after animation
-            setTimeout(() => {
-                if (document.body.contains(dropItem)) {
-                    document.body.removeChild(dropItem);
-                }
-            }, 1200);
-        }
-
-        // Add item to cart with animation
-        function addToCart(id, name, unit, quantity = null) {
-            const qty = quantity || supplyQuantities[id] || 1;
-            const existingItem = cart.find(item => item.id === id);
-            
-            // Find the source element for animation
-            const sourceCard = document.querySelector(`[data-supply-id="${id}"]`) || 
-                              document.querySelector('.custom-item-form');
-            
-            if (sourceCard) {
-                createDropAnimation(sourceCard, name);
-            }
-            
-            if (existingItem) {
-                existingItem.quantity += qty;
-            } else {
-                cart.push({ id, name, unit, quantity: qty });
-            }
-            
-            // Add loading state to button
-            if (sourceCard) {
-                const button = sourceCard.querySelector('.add-to-cart-btn');
-                button.classList.add('loading');
-                setTimeout(() => button.classList.remove('loading'), 600);
-            }
-            
-            setTimeout(() => {
-                renderCart();
-                updateOrderButton();
-                showToast(`${name} added to cart!`);
-            }, 300);
-            
-            // Reset custom form if it was a custom item
-            if (!predefinedSupplies.find(s => s.id === id)) {
-                document.getElementById('customItemName').value = '';
-                document.getElementById('customItemUnit').value = '';
-                document.getElementById('customItemQuantity').value = '1';
-            }
-        }
-
-        // Add custom item
-        function addCustomItem() {
-            const name = document.getElementById('customItemName').value.trim();
-            const unit = document.getElementById('customItemUnit').value.trim();
-            const quantity = parseInt(document.getElementById('customItemQuantity').value);
-            
-            if (!name || !unit || quantity < 1) {
-                showToast('Please fill in all fields with valid values', 'error');
-                return;
-            }
-            
-            const customId = `custom-${Date.now()}`;
-            addToCart(customId, name, unit, quantity);
-        }
-
-        // Render cart with smooth animations
-        function renderCart() {
-            const cartItems = document.getElementById('cartItems');
-            const clearCartBtn = document.getElementById('clearCartBtn');
-            
-            if (cart.length === 0) {
-                cartItems.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
-                clearCartBtn.style.display = 'none';
-            } else {
-                cartItems.innerHTML = cart.map((item, index) => `
-                    <div class="cart-item" style="animation-delay: ${index * 0.1}s">
-                        <div class="cart-item-info">
-                            <div class="cart-item-name">${item.name}</div>
-                            <div class="cart-item-unit">per ${item.unit}</div>
-                        </div>
-                        <div class="cart-item-controls">
-                            <input type="number" class="cart-quantity-input" value="${item.quantity}" 
-                                   min="1" onchange="updateCartQuantity('${item.id}', this.value)">
-                            <button class="remove-btn" onclick="removeFromCart('${item.id}')">Remove</button>
-                        </div>
+    <main>
+        <section id="home" class="hero">
+            <div class="hero-background"></div>
+            <div class="container">
+                <div class="hero-content">
+                    <h1 class="hero-title">Protecting What Matters Most</h1>
+                    <p class="hero-subtitle">Industry-leading security solutions with 24/7 monitoring, expert consulting, and comprehensive risk assessment for your peace of mind</p>
+                    <div class="hero-cta">
+                        <a href="#contact" class="btn btn-primary">Get Started</a>
+                        <a href="#services" class="btn btn-secondary">Our Services</a>
                     </div>
-                `).join('');
-                clearCartBtn.style.display = 'block';
-            }
-        }
-
-        // Update cart item quantity
-        function updateCartQuantity(id, newQuantity) {
-            const quantity = parseInt(newQuantity);
-            if (quantity < 1) return;
-            
-            const item = cart.find(item => item.id === id);
-            if (item) {
-                item.quantity = quantity;
-                updateOrderButton();
-            }
-        }
-
-        // Remove item from cart
-        function removeFromCart(id) {
-            cart = cart.filter(item => item.id !== id);
-            renderCart();
-            updateOrderButton();
-            showToast('Item removed from cart');
-        }
-
-        // Clear cart with confirmation
-        function clearCart() {
-            if (confirm('Are you sure you want to clear your cart?')) {
-                cart = [];
-                renderCart();
-                updateOrderButton();
-                showToast('Cart cleared');
-            }
-        }
-
-        // Handle cleaner selection change
-        function handleCleanerChange() {
-            const select = document.getElementById('cleanerSelect');
-            const customInput = document.getElementById('customCleanerName');
-            
-            if (select.value === 'others') {
-                customInput.style.display = 'block';
-                customInput.focus();
-            } else {
-                customInput.style.display = 'none';
-                customInput.value = '';
-            }
-            
-            updateOrderButton();
-        }
-
-        // Update order button state
-        function updateOrderButton() {
-            const cleanerSelect = document.getElementById('cleanerSelect');
-            const customCleanerName = document.getElementById('customCleanerName');
-            const placeOrderBtn = document.getElementById('placeOrderBtn');
-            
-            const hasSelectedCleaner = cleanerSelect.value && 
-                (cleanerSelect.value !== 'others' || customCleanerName.value.trim());
-            const hasItems = cart.length > 0;
-            
-            placeOrderBtn.disabled = !hasSelectedCleaner || !hasItems;
-        }
-
-        // Place order with enhanced animation
-        function placeOrder() {
-            const cleanerSelect = document.getElementById('cleanerSelect');
-            const customCleanerName = document.getElementById('customCleanerName');
-            const lockerType = document.querySelector('input[name="lockerType"]:checked').value;
-            const comments = document.getElementById('orderComments').value.trim();
-            const placeOrderBtn = document.getElementById('placeOrderBtn');
-            
-            const cleanerName = cleanerSelect.value === 'others' ? 
-                customCleanerName.value.trim() : cleanerSelect.value;
-            
-            if (!cleanerName || cart.length === 0) {
-                showToast('Please select a cleaner and add items to cart', 'error');
-                return;
-            }
-            
-            // Add loading state
-            placeOrderBtn.classList.add('loading');
-            placeOrderBtn.textContent = 'Processing...';
-            
-            setTimeout(() => {
-                const order = {
-                    id: orderCounter++,
-                    date: new Date().toISOString(),
-                    cleaner: cleanerName,
-                    lockerType: lockerType,
-                    items: [...cart],
-                    comments: comments,
-                    orderComments: []
-                };
-                
-                orders.unshift(order);
-                localStorage.setItem('cleaningOrders', JSON.stringify(orders));
-                localStorage.setItem('orderCounter', orderCounter.toString());
-                
-                // Reset form
-                cart = [];
-                renderCart();
-                document.getElementById('cleanerSelect').value = '';
-                document.getElementById('customCleanerName').style.display = 'none';
-                document.getElementById('customCleanerName').value = '';
-                document.querySelector('input[name="lockerType"][value="residential"]').checked = true;
-                document.getElementById('orderComments').value = '';
-                
-                // Reset button
-                placeOrderBtn.classList.remove('loading');
-                placeOrderBtn.textContent = 'Place Order';
-                updateOrderButton();
-                
-                showToast(`Order #${order.id} placed successfully!`);
-                populateCleanerFilter();
-            }, 1000);
-        }
-
-        // Open order history modal
-        function openOrderHistory() {
-            document.getElementById('orderHistoryModal').classList.add('show');
-            renderOrderHistory();
-        }
-
-        // Close order history modal
-        function closeOrderHistory() {
-            document.getElementById('orderHistoryModal').classList.remove('show');
-        }
-
-        // Render order history
-        function renderOrderHistory() {
-            const orderHistoryList = document.getElementById('orderHistoryList');
-            
-            if (orders.length === 0) {
-                orderHistoryList.innerHTML = '<div class="empty-cart">No orders placed yet</div>';
-                return;
-            }
-            
-            let filteredOrders = [...orders];
-            
-            // Apply filters
-            const cleanerFilter = document.getElementById('cleanerFilter').value;
-            const lockerFilter = document.getElementById('lockerFilter').value;
-            const itemFilter = document.getElementById('itemFilter').value.toLowerCase();
-            
-            if (cleanerFilter) {
-                filteredOrders = filteredOrders.filter(order => order.cleaner === cleanerFilter);
-            }
-            
-            if (lockerFilter) {
-                filteredOrders = filteredOrders.filter(order => order.lockerType === lockerFilter);
-            }
-            
-            if (itemFilter) {
-                filteredOrders = filteredOrders.filter(order => 
-                    order.items.some(item => item.name.toLowerCase().includes(itemFilter))
-                );
-            }
-            
-            orderHistoryList.innerHTML = filteredOrders.map(order => `
-                <div class="order-item">
-                    <div class="order-header">
-                        <div class="order-id">Order #${order.id}</div>
-                        <div class="order-date">${new Date(order.date).toLocaleString()}</div>
-                    </div>
-                    <div class="order-details">
-                        <div class="order-detail-row"><strong>Cleaner:</strong> ${order.cleaner}</div>
-                        <div class="order-detail-row"><strong>Locker Type:</strong> ${order.lockerType}</div>
-                        ${order.comments ? `<div class="order-detail-row"><strong>Comments:</strong> ${order.comments}</div>` : ''}
-                        <div class="order-detail-row"><strong>Items:</strong></div>
-                        <div class="order-items-list">
-                            ${order.items.map(item => `
-                                <div class="order-item-entry">
-                                    <span>${item.name}</span>
-                                    <span>${item.quantity} ${item.unit}${item.quantity > 1 ? 's' : ''}</span>
-                                </div>
-                            `).join('')}
+                    <div class="hero-stats">
+                        <div class="stat">
+                            <div class="stat-number">15+</div>
+                            <div class="stat-label">Years Experience</div>
                         </div>
-                    </div>
-                    <div class="comments-section">
-                        <strong>Order Comments:</strong>
-                        <div id="comments-${order.id}">
-                            ${order.orderComments.map(comment => `
-                                <div class="comment-item">
-                                    <div class="comment-timestamp">${new Date(comment.timestamp).toLocaleString()}</div>
-                                    <div>${comment.text}</div>
-                                </div>
-                            `).join('')}
+                        <div class="stat">
+                            <div class="stat-number">5000+</div>
+                            <div class="stat-label">Clients Protected</div>
                         </div>
-                        <div class="add-comment-section">
-                            <input type="text" class="comment-input" placeholder="Add a comment..." id="comment-input-${order.id}">
-                            <button class="add-comment-btn" onclick="addComment(${order.id})">Add</button>
+                        <div class="stat">
+                            <div class="stat-number">24/7</div>
+                            <div class="stat-label">Monitoring</div>
                         </div>
                     </div>
                 </div>
-            `).join('');
-        }
+            </div>
+        </section>
 
-        // Add comment to order
-        function addComment(orderId) {
-            const commentInput = document.getElementById(`comment-input-${orderId}`);
-            const commentText = commentInput.value.trim();
-            
-            if (!commentText) return;
-            
-            const order = orders.find(o => o.id === orderId);
-            if (order) {
-                order.orderComments.push({
-                    text: commentText,
-                    timestamp: new Date().toISOString()
-                });
-                
-                localStorage.setItem('cleaningOrders', JSON.stringify(orders));
-                commentInput.value = '';
-                renderOrderHistory();
-                showToast('Comment added successfully!');
-            }
-        }
+        <section id="services" class="services">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Our Security Services</h2>
+                    <p class="section-subtitle">Comprehensive solutions tailored to your security needs</p>
+                </div>
+                <div class="services-grid">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                                <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="service-title">24/7 Monitoring</h3>
+                        <p class="service-description">Round-the-clock surveillance and monitoring services to ensure your property is always protected with instant alerts and rapid response.</p>
+                    </div>
 
-        // Populate cleaner filter dropdown
-        function populateCleanerFilter() {
-            const cleanerFilter = document.getElementById('cleanerFilter');
-            const cleaners = [...new Set(orders.map(order => order.cleaner))];
-            
-            cleanerFilter.innerHTML = '<option value="">All Cleaners</option>' + 
-                cleaners.map(cleaner => `<option value="${cleaner}">${cleaner}</option>`).join('');
-        }
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21 8V16C21 16.5304 20.7893 17.0391 20.4142 17.4142C20.0391 17.7893 19.5304 18 19 18H5C4.46957 18 3.96086 17.7893 3.58579 17.4142C3.21071 17.0391 3 16.5304 3 16V8M21 8L12 13L3 8M21 8L12 3L3 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="service-title">Security Consulting</h3>
+                        <p class="service-description">Expert security assessments and strategic planning to identify vulnerabilities and implement effective protection strategies.</p>
+                    </div>
 
-        // Filter orders
-        function filterOrders() {
-            renderOrderHistory();
-        }
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="service-title">Installation Services</h3>
+                        <p class="service-description">Professional installation of security systems, cameras, access controls, and alarm systems by certified technicians.</p>
+                    </div>
 
-        // Export orders to CSV
-        function exportToCSV() {
-            if (orders.length === 0) {
-                showToast('No orders to export', 'warning');
-                return;
-            }
-            
-            const headers = ['Order ID', 'Date', 'Cleaner', 'Locker Type', 'Items', 'Quantities', 'Comments'];
-            const csvData = [headers];
-            
-            orders.forEach(order => {
-                const items = order.items.map(item => item.name).join('; ');
-                const quantities = order.items.map(item => `${item.quantity} ${item.unit}${item.quantity > 1 ? 's' : ''}`).join('; ');
-                
-                csvData.push([
-                    order.id,
-                    new Date(order.date).toLocaleString(),
-                    order.cleaner,
-                    order.lockerType,
-                    items,
-                    quantities,
-                    order.comments || ''
-                ]);
-            });
-            
-            const csvContent = csvData.map(row => 
-                row.map(field => `"${String(field).replace(/"/g, '""')}"`).join(',')
-            ).join('\n');
-            
-            const blob = new Blob([csvContent], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `cleaning-orders-${new Date().toISOString().split('T')[0]}.csv`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 11L12 14L22 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M21 12V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="service-title">Risk Assessment</h3>
+                        <p class="service-description">Comprehensive security audits and risk analysis to identify potential threats and develop mitigation strategies.</p>
+                    </div>
 
-            showToast('Orders exported successfully!');
-        }
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="3" y="11" width="18" height="11" rx="2" stroke="currentColor" stroke-width="2"/>
+                                <path d="M7 11V7C7 5.67392 7.52678 4.40215 8.46447 3.46447C9.40215 2.52678 10.6739 2 12 2C13.3261 2 14.5979 2.52678 15.5355 3.46447C16.4732 4.40215 17 5.67392 17 7V11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="service-title">Access Control</h3>
+                        <p class="service-description">Advanced access control systems to manage and monitor entry points with biometric and card-based solutions.</p>
+                    </div>
 
-        function clearOrderHistory() {
-            if (!confirm('Are you sure you want to clear all order history?')) return;
-            orders = [];
-            orderCounter = 1;
-            localStorage.removeItem('cleaningOrders');
-            localStorage.removeItem('orderCounter');
-            populateCleanerFilter();
-            renderOrderHistory();
-            showToast('Order history cleared!');
-        }
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M23 3L16 10L14 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M14 8L10 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M10 12L3 19C2 20 2 21 2 21C2 21 3 21 4 20L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M11 13L16 18C17 19 18 19 18 19C18 19 18 18 17 17L12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="service-title">Emergency Response</h3>
+                        <p class="service-description">Rapid emergency response teams available 24/7 to handle security incidents and coordinate with local authorities.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        // Enhanced toast notification with better animations
-        function showToast(message, type = 'success') {
-            const existingToasts = document.querySelectorAll('.toast');
-            existingToasts.forEach((toast, index) => {
-                toast.style.top = parseInt(toast.style.top || 30) + 80 + 'px';
-            });
-            
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            toast.textContent = message;
-            toast.style.top = '30px';
-            
-            document.body.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.style.animation = 'toastSlideIn 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) reverse';
-                setTimeout(() => {
-                    if (document.body.contains(toast)) {
-                        document.body.removeChild(toast);
-                    }
-                }, 400);
-            }, 3000);
-        }
+        <section id="features" class="features">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Why Choose SecureGuard</h2>
+                    <p class="section-subtitle">Industry-leading benefits that set us apart</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2L4 6V11C4 16.55 7.84 21.74 13 23C18.16 21.74 22 16.55 22 11V6L12 2Z" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Certified Professionals</h3>
+                        <p class="feature-description">Our team consists of licensed and certified security experts with years of experience.</p>
+                    </div>
 
-        function toggleDarkMode() {
-            darkMode = !darkMode;
-            localStorage.setItem('darkMode', darkMode.toString());
-            applyDarkMode();
-        }
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Rapid Response</h3>
+                        <p class="feature-description">Average response time under 5 minutes for all security alerts and emergencies.</p>
+                    </div>
 
-        function applyDarkMode() {
-            const body = document.body;
-            const btn = document.querySelector('.dark-mode-toggle');
-            if (darkMode) {
-                body.classList.add('dark-mode');
-                if (btn) btn.textContent = '☀️';
-            } else {
-                body.classList.remove('dark-mode');
-                if (btn) btn.textContent = '🌙';
-            }
-        }
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                                <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Always Available</h3>
+                        <p class="feature-description">24/7/365 monitoring and support ensures you're never alone in a crisis.</p>
+                    </div>
 
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modal = document.getElementById('orderHistoryModal');
-            if (event.target === modal) {
-                closeOrderHistory();
-            }
-        }
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21 16V8C21 6.9 20.1 6 19 6H5C3.89 6 3 6.9 3 8V16C3 17.1 3.89 18 5 18H19C20.1 18 21 17.1 21 16Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M12 6V2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M12 18V22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M7 2H17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M7 22H17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Advanced Technology</h3>
+                        <p class="feature-description">State-of-the-art security systems with AI-powered threat detection.</p>
+                    </div>
 
-        // Listen for custom cleaner input changes
-        document.getElementById('customCleanerName').addEventListener('input', updateOrderButton);
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+                                <path d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89318 18.7122 8.75608 18.1676 9.45769C17.623 10.1593 16.8604 10.6597 16 10.88" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Dedicated Support</h3>
+                        <p class="feature-description">Personalized account management and support tailored to your needs.</p>
+                    </div>
 
-        // Add keyboard shortcuts
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeOrderHistory();
-            }
-        });
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 1L9 9L1 12L9 15L12 23L15 15L23 12L15 9L12 1Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Proven Track Record</h3>
+                        <p class="feature-description">Over 15 years of excellence with thousands of satisfied clients.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        // Initialize the application when the page loads
-        document.addEventListener('DOMContentLoaded', initializeApp);
-    </script>
+        <section id="about" class="about">
+            <div class="container">
+                <div class="about-content">
+                    <div class="about-text">
+                        <h2 class="section-title">Trusted Security Partner</h2>
+                        <p class="about-description">
+                            With over 15 years of experience in the security industry, SecureGuard has become a trusted name in comprehensive security solutions. We've protected over 5,000 residential and commercial properties, preventing countless incidents through our proactive approach.
+                        </p>
+                        <p class="about-description">
+                            Our team of certified security professionals brings together expertise from law enforcement, military, and private security sectors. We stay ahead of emerging threats through continuous training and investment in cutting-edge technology.
+                        </p>
+                        <div class="trust-indicators">
+                            <div class="trust-item">
+                                <svg class="trust-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2L4 6V11C4 16.55 7.84 21.74 13 23C18.16 21.74 22 16.55 22 11V6L12 2Z" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M9 12L11 14L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <div class="trust-text">
+                                    <h4>Licensed & Insured</h4>
+                                    <p>Fully licensed and bonded</p>
+                                </div>
+                            </div>
+                            <div class="trust-item">
+                                <svg class="trust-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 1L9 9L1 12L9 15L12 23L15 15L23 12L15 9L12 1Z" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                                <div class="trust-text">
+                                    <h4>Award Winning</h4>
+                                    <p>Industry recognized excellence</p>
+                                </div>
+                            </div>
+                            <div class="trust-item">
+                                <svg class="trust-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                                <div class="trust-text">
+                                    <h4>24/7 Support</h4>
+                                    <p>Always here when you need us</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="about-stats">
+                        <div class="stat-card">
+                            <div class="stat-value">15+</div>
+                            <div class="stat-name">Years in Business</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">5000+</div>
+                            <div class="stat-name">Clients Served</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">99.8%</div>
+                            <div class="stat-name">Uptime Rate</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">&lt;5min</div>
+                            <div class="stat-name">Response Time</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="contact">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Get In Touch</h2>
+                    <p class="section-subtitle">Ready to secure your property? Contact us for a free consultation</p>
+                </div>
+                <div class="contact-content">
+                    <form id="contactForm" class="contact-form" novalidate>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name" class="form-label">Full Name *</label>
+                                <input 
+                                    type="text" 
+                                    id="name" 
+                                    name="name" 
+                                    class="form-input" 
+                                    required 
+                                    placeholder="John Doe"
+                                >
+                                <span class="error-message" id="nameError"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="email" class="form-label">Email Address *</label>
+                                <input 
+                                    type="email" 
+                                    id="email" 
+                                    name="email" 
+                                    class="form-input" 
+                                    required 
+                                    placeholder="john@example.com"
+                                >
+                                <span class="error-message" id="emailError"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone" class="form-label">Phone Number *</label>
+                            <input 
+                                type="tel" 
+                                id="phone" 
+                                name="phone" 
+                                class="form-input" 
+                                required 
+                                placeholder="(555) 123-4567"
+                            >
+                            <span class="error-message" id="phoneError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="message" class="form-label">Message *</label>
+                            <textarea 
+                                id="message" 
+                                name="message" 
+                                class="form-input form-textarea" 
+                                required 
+                                rows="5" 
+                                placeholder="Tell us about your security needs..."
+                            ></textarea>
+                            <span class="error-message" id="messageError"></span>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-submit">Send Message</button>
+                        <div class="form-success" id="formSuccess">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                                <path d="M9 12L11 14L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <p>Thank you for your message! We'll get back to you within 24 hours.</p>
+                        </div>
+                    </form>
+                    <div class="contact-info">
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M21 10C21 17 12 23 12 23C12 23 3 17 3 10C3 7.61305 3.94821 5.32387 5.63604 3.63604C7.32387 1.94821 9.61305 1 12 1C14.3869 1 16.6761 1.94821 18.364 3.63604C20.0518 5.32387 21 7.61305 21 10Z" stroke="currentColor" stroke-width="2"/>
+                                    <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <div class="info-content">
+                                <h4>Address</h4>
+                                <p>123 Security Boulevard<br>Suite 500, New York, NY 10001</p>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M22 16.92V19.92C22.0011 20.1985 21.9441 20.4742 21.8325 20.7293C21.7209 20.9845 21.5573 21.2136 21.3521 21.4019C21.1468 21.5901 20.9046 21.7335 20.6407 21.8227C20.3769 21.9119 20.0974 21.9451 19.82 21.92C16.7428 21.5856 13.787 20.5341 11.19 18.85C8.77382 17.3147 6.72533 15.2662 5.18999 12.85C3.49997 10.2412 2.44824 7.27097 2.11999 4.18C2.095 3.90347 2.12787 3.62476 2.21649 3.36162C2.30512 3.09849 2.44756 2.85669 2.63476 2.65162C2.82196 2.44655 3.0498 2.28271 3.30379 2.17052C3.55777 2.05833 3.83233 2.00026 4.10999 2H7.10999C7.5953 1.99522 8.06579 2.16708 8.43376 2.48353C8.80173 2.79999 9.04207 3.23945 9.10999 3.72C9.23662 4.68007 9.47144 5.62273 9.80999 6.53C9.94454 6.88792 9.97366 7.27691 9.8939 7.65088C9.81415 8.02485 9.62886 8.36811 9.35999 8.64L8.08999 9.91C9.51355 12.4135 11.5864 14.4864 14.09 15.91L15.36 14.64C15.6319 14.3711 15.9751 14.1858 16.3491 14.1061C16.7231 14.0263 17.1121 14.0555 17.47 14.19C18.3773 14.5286 19.3199 14.7634 20.28 14.89C20.7658 14.9585 21.2094 15.2032 21.5265 15.5775C21.8437 15.9518 22.0122 16.4296 22 16.92Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="info-content">
+                                <h4>Phone</h4>
+                                <p>(555) 123-4567<br>Emergency: (555) 911-0000</p>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M22 6L12 13L2 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="info-content">
+                                <h4>Email</h4>
+                                <p>info@secureguard.com<br>support@secureguard.com</p>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <div class="info-content">
+                                <h4>Business Hours</h4>
+                                <p>Mon-Fri: 8:00 AM - 6:00 PM<br>24/7 Emergency Support</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L4 6V11C4 16.55 7.84 21.74 13 23C18.16 21.74 22 16.55 22 11V6L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M9 12L11 14L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span class="logo-text">SecureGuard</span>
+                    </div>
+                    <p class="footer-description">
+                        Professional security solutions protecting what matters most. Available 24/7 for your peace of mind.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="Facebook">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Twitter">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="LinkedIn">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Instagram">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Services</h3>
+                    <ul class="footer-links">
+                        <li><a href="#services">24/7 Monitoring</a></li>
+                        <li><a href="#services">Security Consulting</a></li>
+                        <li><a href="#services">Installation Services</a></li>
+                        <li><a href="#services">Risk Assessment</a></li>
+                        <li><a href="#services">Access Control</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Company</h3>
+                    <ul class="footer-links">
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Contact</h3>
+                    <ul class="footer-contact">
+                        <li>123 Security Boulevard</li>
+                        <li>Suite 500, New York, NY 10001</li>
+                        <li><a href="tel:5551234567">(555) 123-4567</a></li>
+                        <li><a href="mailto:info@secureguard.com">info@secureguard.com</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 SecureGuard. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <button id="scrollToTop" class="scroll-to-top" aria-label="Scroll to top">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 19V5M5 12L12 5L19 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+
+    <script src="script.js"></script>
 </body>
 </html>
