@@ -1,7 +1,13 @@
-import type { FilterOptions } from '../../../types';
-import { Button } from '../../ui/Button';
-import { Input } from '../../ui/Input';
+// 🌐 SECTION A: Header & Config
+// FILE: src/components/dashboard/FilterBar.tsx
+// LAST UPDATED: 2025-10-16
 
+// 📝 A1: Imports
+import type { FilterOptions } from '../../types';
+import { Button } from '../ui/Button';
+import { Input } from '../ui/Input';
+
+// ⚙️ SECTION B: Core Component Logic
 interface FilterBarProps {
   filters: FilterOptions;
   onFilterChange: (filters: Partial<FilterOptions>) => void;
