@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import type { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabaseClient';
 
-export function useRealtimeTable<T>(
+export function useRealtimeTable<T extends object>(
   table: string,
   handler: (payload: RealtimePostgresChangesPayload<T>) => void
 ) {
@@ -16,7 +16,7 @@ export function useRealtimeTable<T>(
           schema: 'public',
           table
         },
-        (payload) => handler(payload)
+        handler
       )
       .subscribe();
 
