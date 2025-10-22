@@ -38,6 +38,9 @@ bower_components/
 # Build outputs (if adding build tools later)
 dist/
 build/
+*.tsbuildinfo
+vite.config.js
+vite.config.d.ts
 
 # Temporary files
 *.tmp

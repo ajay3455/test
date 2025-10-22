@@ -7,7 +7,7 @@ export type WorkStatus =
   | 'cancelled'
   | 'not_applicable';
 
-export interface GeneralComment {
+export interface GeneralComment extends Record<string, unknown> {
   id: string;
   text: string;
   author_id?: string | null;
