@@ -1,5 +1,4 @@
 import { IntercomTrainer } from '../components/intercom/IntercomTrainer';
-
 export function IntercomTrainerPage() {
   return (
     <div className="space-y-10">
@@ -15,4 +14,9 @@ export function IntercomTrainerPage() {
       <IntercomTrainer />
     </div>
   );
+=======
+import { IntercomTrainer } from '../components/training/IntercomTrainer';
+
+export function IntercomTrainerPage() {
+  return <IntercomTrainer />;
 }
