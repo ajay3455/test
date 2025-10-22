@@ -16,7 +16,7 @@ export interface GeneralComment {
   is_important?: boolean;
 }
 
-export interface PreAuthorizedContractor {
+export interface PreAuthorizedContractor extends Record<string, unknown> {
   id: string;
   created_at: string;
   name: string;
@@ -31,7 +31,7 @@ export interface PreAuthorizedContractor {
   created_by?: string | null;
 }
 
-export interface ContractorSignIn {
+export interface ContractorSignIn extends Record<string, unknown> {
   id: string;
   created_at: string;
   pre_authorized_contractor_id?: string | null;

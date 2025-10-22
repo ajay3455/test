@@ -3,11 +3,13 @@ import { Toaster } from 'react-hot-toast';
 import { GuardProfileProvider } from './context/GuardProfileContext';
 import { DashboardPage } from './pages/DashboardPage';
 import { PreAuthorizedPage } from './pages/PreAuthorizedPage';
+import { IntercomTrainerPage } from './pages/IntercomTrainerPage';
 import { GuardProfileSettings } from './components/GuardProfileSettings';
 
 const navigation = [
   { to: '/', label: 'Contractor Log' },
-  { to: '/pre-authorized', label: 'Pre-Authorized Directory' }
+  { to: '/pre-authorized', label: 'Pre-Authorized Directory' },
+  { to: '/intercom-trainer', label: 'Intercom Trainer' }
 ];
 
 export default function App() {
@@ -52,6 +54,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<DashboardPage />} />
             <Route path="/pre-authorized" element={<PreAuthorizedPage />} />
+            <Route path="/intercom-trainer" element={<IntercomTrainerPage />} />
           </Routes>
         </main>
       </div>
