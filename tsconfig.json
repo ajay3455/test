@@ -3,7 +3,8 @@
   "compilerOptions": {
     "baseUrl": "./src",
     "types": ["vite/client"],
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "moduleResolution": "bundler"
   },
   "include": ["src"],
   "references": [
