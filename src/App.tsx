@@ -4,10 +4,12 @@ import { GuardProfileProvider } from './context/GuardProfileContext';
 import { DashboardPage } from './pages/DashboardPage';
 import { PreAuthorizedPage } from './pages/PreAuthorizedPage';
 import { GuardProfileSettings } from './components/GuardProfileSettings';
+import { IntercomTrainerPage } from './pages/IntercomTrainerPage';
 
 const navigation = [
   { to: '/', label: 'Contractor Log' },
-  { to: '/pre-authorized', label: 'Pre-Authorized Directory' }
+  { to: '/pre-authorized', label: 'Pre-Authorized Directory' },
+  { to: '/intercom', label: 'Intercom Trainer' }
 ];
 
 export default function App() {
@@ -52,6 +54,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<DashboardPage />} />
             <Route path="/pre-authorized" element={<PreAuthorizedPage />} />
+            <Route path="/intercom" element={<IntercomTrainerPage />} />
           </Routes>
         </main>
       </div>
