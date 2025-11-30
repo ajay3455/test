@@ -1,182 +1,242 @@
-# Security Hub Mini
+# Ajaypreet Singh - Professional Resume Website
 
-Security Hub Mini is a focused contractor sign-in and sign-out single-page application designed as a resilient backup tool for security desk teams. The application is built with React, TypeScript, Vite, Tailwind CSS, and Supabase to deliver a modern, responsive, and real-time experience across desktop and tablet devices.
+A modern, responsive website showcasing the professional experience and qualifications of Ajaypreet Singh, Security Supervisor and Operations Leader.
 
-## Features
+![Website Preview](https://img.shields.io/badge/Status-Live-success)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)
 
-### Contractor Sign-In Workspace
-- Smart sign-in form with pre-authorized contractor lookups and instant auto-fill.
-- Parking management, Just Parking mode, and multi-vehicle plate tracking.
-- Keys tracking with searchable presets, custom "Other" entry, and ID verification workflow.
-- Quick purpose buttons, auto-approval preferences, and fully persistent draft recovery.
+## 🌟 Features
 
-### Live Contractor Log Dashboard
-- Real-time Supabase subscription powering the activity grid.
-- Status-aware contractor cards with elapsed time and parking countdown timers.
-- Quick filters for active visits and same-day activity, plus advanced filtering by date range, approval state, keys, and parking mode.
-- Detail modal with comment timeline, approval/decline workflow, sign-out process, and visit history viewer.
+### Design & Layout
+- **Responsive Design**: Fully responsive layout that works seamlessly on desktop, tablet, and mobile devices
+- **Modern UI**: Clean, professional design with gradient backgrounds and smooth animations
+- **Single Page Application**: All content on one page with smooth scroll navigation
+- **Mobile Navigation**: Hamburger menu for mobile devices
 
-### Pre-Authorized Directory Management
-- Searchable, filterable directory with activation, archival, and profile picture management.
-- Add/edit modal for complete contractor profiles, including category, notes, and known license plates.
-- Merge workflow to consolidate duplicates and reassign historical sign-ins automatically.
-- CSV import/export for rapid bootstrapping and secure data backups.
+### Sections
+1. **Hero Section**
+   - Professional title and location
+   - Quick stats (years of experience, certifications)
+   - Call-to-action buttons
+   - Social media links
 
-## Getting Started
+2. **Professional Summary**
+   - Comprehensive overview of experience and skills
+   - Language proficiencies (Punjabi, English, Hindi)
+   - Key skills showcase
+
+3. **Experience Timeline**
+   - Visual timeline of professional positions
+   - Current position highlighted
+   - Detailed responsibilities for each role
+   - Company logos and locations
+   - Employment types and durations
+
+4. **Certifications & Licenses**
+   - Grid layout of all certifications
+   - Issue and expiry dates
+   - Certification IDs
+   - Category tags (First Aid, CPR, AED, etc.)
+
+5. **Education**
+   - College diploma details
+   - High school information
+   - Visual icons for each institution
+
+6. **Contact Section**
+   - Email contact
+   - LinkedIn profile link
+   - Resume download option
+   - Thank you message
+
+### Interactive Features
+- Smooth scroll navigation
+- Scroll progress indicator
+- Active section highlighting in navigation
+- Hover effects on cards and buttons
+- Fade-in animations on scroll
+- Mobile-friendly hamburger menu
+- Keyboard navigation support
+
+## 🚀 Live Demo
+
+**Website URL**: [https://8000-iz8bbnndcan22vcqbk1r2-583b4d74.sandbox.novita.ai](https://8000-iz8bbnndcan22vcqbk1r2-583b4d74.sandbox.novita.ai)
+
+## 📁 Project Structure
+
+```
+webapp/
+├── index.html          # Main HTML file with complete structure
+├── styles.css          # Complete styling with responsive design
+├── script.js           # Interactive JavaScript features
+├── resume.pdf          # Original PDF resume
+└── README.md          # Project documentation
+```
+
+## 🛠️ Technologies Used
+
+- **HTML5**: Semantic markup for better SEO and accessibility
+- **CSS3**: 
+  - Flexbox and Grid layouts
+  - CSS Variables for theming
+  - Keyframe animations
+  - Media queries for responsiveness
+- **JavaScript ES6+**:
+  - Intersection Observer API
+  - Event listeners
+  - DOM manipulation
+  - Smooth scroll implementation
+- **Font Awesome**: Icons for visual enhancement
+
+## 🎨 Design Highlights
+
+### Color Scheme
+- Primary: `#2563eb` (Blue)
+- Secondary: `#1e40af` (Dark Blue)
+- Accent: `#3b82f6` (Light Blue)
+- Success: `#10b981` (Green)
+- Background: `#f8fafc` (Light Gray)
+- Text: `#1e293b` (Dark Gray)
+
+### Typography
+- Font Family: Inter, system fonts
+- Responsive font sizes
+- Clear hierarchy with headings
+
+### Animations
+- Fade-in on scroll
+- Hover effects
+- Smooth transitions
+- Parallax hero section
+
+## 📱 Responsive Breakpoints
+
+```css
+Desktop:  1200px and above
+Tablet:   768px - 1199px
+Mobile:   Below 768px
+```
+
+## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js 18+
-- npm, pnpm, or yarn (examples below assume npm)
-- A Supabase project with the following environment variables:
-  - `VITE_SUPABASE_URL`
-  - `VITE_SUPABASE_ANON_KEY`
+- A modern web browser (Chrome, Firefox, Safari, Edge)
+- Python 3.x (for local server) or any HTTP server
 
-Create a `.env` file in the project root:
+### Installation
 
+1. Clone the repository:
 ```bash
-cp .env.example .env
+git clone https://github.com/ajay3455/test.git
+cd test
 ```
 
-Fill in the Supabase credentials in `.env`:
+2. Start a local server:
 
-```env
-VITE_SUPABASE_URL="https://your-project.supabase.co"
-VITE_SUPABASE_ANON_KEY="public-anon-key"
-```
-
-### Install & Run
-
+**Using Python:**
 ```bash
-npm install
-npm run dev
+python3 -m http.server 8000
 ```
 
-The application runs at [http://localhost:5173](http://localhost:5173) by default.
-
-To build for production:
-
+**Using Node.js (http-server):**
 ```bash
-npm run build
+npx http-server -p 8000
 ```
 
-Preview the production build locally:
-
+**Using PHP:**
 ```bash
-npm run preview
+php -S localhost:8000
 ```
 
-## Supabase Setup
-
-### Database Tables
-
-Create two tables using the SQL snippets provided in `/supabase/schema.sql` (or add them manually via the Supabase dashboard):
-
-#### `pre_authorized_contractors`
-Stores the master directory of contractors for quick lookups.
-
-| Column | Type | Notes |
-| --- | --- | --- |
-| `id` | `uuid` | Primary key, `uuid_generate_v4()` default |
-| `created_at` | `timestamptz` | Default `now()` |
-| `name` | `text` | Required |
-| `company` | `text` | Required |
-| `contact_number` | `text` | Optional |
-| `known_license_plates` | `text[]` | Optional |
-| `notes` | `text` | Optional |
-| `category` | `text` | Optional |
-| `is_active` | `boolean` | Default `true` |
-| `archived` | `boolean` | Default `false` |
-| `profile_picture_url` | `text` | Optional |
-| `created_by` | `uuid` | Optional FK to `auth.users` |
-
-#### `contractor_sign_ins`
-Tracks every visit including approvals, notes, and sign-out details.
-
-| Column | Type | Notes |
-| --- | --- | --- |
-| `id` | `uuid` | Primary key, `uuid_generate_v4()` default |
-| `created_at` | `timestamptz` | Default `now()` (sign-in time) |
-| `pre_authorized_contractor_id` | `uuid` | Optional FK to `pre_authorized_contractors` |
-| `name` | `text` | Required |
-| `company` | `text` | Required |
-| `contact_number` | `text` | Optional |
-| `purpose_of_visit` | `text` | Required |
-| `needs_parking` | `boolean` | Default `false` |
-| `vehicles_signed_in` | `text[]` | Optional |
-| `keys` | `text[]` | Optional |
-| `id_provided` | `boolean` | Default `true` |
-| `contractor_notes` | `text` | Optional |
-| `is_signed_out` | `boolean` | Default `false` |
-| `sign_out_time` | `timestamptz` | Optional |
-| `approval_status` | `text` | Default `'pending'` |
-| `security_approval_notes` | `text` | Optional |
-| `security_sign_out_notes` | `text` | Optional |
-| `work_status` | `text` | Optional |
-| `work_details` | `text` | Optional |
-| `keys_returned` | `boolean` | Optional |
-| `keys_not_returned_reason` | `text` | Optional |
-| `parking_duration_minutes` | `integer` | Optional |
-| `created_by_user_id` | `uuid` | Optional FK to `auth.users` |
-| `created_by_user_name` | `text` | Optional |
-| `approved_by_name` | `text` | Optional |
-| `signed_out_by_name` | `text` | Optional |
-| `general_comments` | `jsonb` | Optional array of comment objects |
-
-### Row Level Security
-Enable RLS on both tables and allow access to authenticated users or service role as needed for your deployment model.
-
-### Storage Bucket
-Create a public storage bucket named `contractor-profile-pictures` for profile photo uploads. Grant authenticated users the ability to upload and read.
-
-## Project Structure
-
+3. Open your browser and navigate to:
 ```
-/
-├── src/
-│   ├── components/
-│   │   ├── common/
-│   │   │   └── Modal.tsx
-│   │   ├── dashboard/
-│   │   │   ├── ContractorCard.tsx
-│   │   │   ├── ContractorDetailModal.tsx
-│   │   │   ├── ContractorLog.tsx
-│   │   │   ├── StatusBadge.tsx
-│   │   │   └── modals/
-│   │   ├── pre-authorized/
-│   │   │   ├── ManageContractorModal.tsx
-│   │   │   ├── MergeContractorsModal.tsx
-│   │   │   ├── PreAuthorizedDirectory.tsx
-│   │   │   └── ProfileImageUploader.tsx
-│   │   └── sign-in/
-│   │       └── SignInForm.tsx
-│   ├── context/
-│   │   └── GuardProfileContext.tsx
-│   ├── hooks/
-│   ├── lib/
-│   │   └── supabaseClient.ts
-│   ├── pages/
-│   │   ├── DashboardPage.tsx
-│   │   └── PreAuthorizedPage.tsx
-│   ├── utils/
-│   ├── App.tsx
-│   ├── main.tsx
-│   └── index.css
-├── tailwind.config.ts
-├── tsconfig.json
-├── vite.config.ts
-└── README.md
+http://localhost:8000
 ```
 
-## Environment Notes
-- Guard settings (name + auto-approval preference) persist via `localStorage` so each station retains its configuration.
-- Form drafts are auto-saved in `localStorage` and can be cleared manually.
-- All Supabase mutations show toast feedback to operators and gracefully handle errors.
+## 📄 Resume Information
 
-## Accessibility & Responsiveness
-- Every interactive control has focus styles and keyboard support (e.g., toggles and modals).
-- Layout is optimized for 1280px desktop displays and 1024px tablet landscape orientations.
-- High-contrast dark theme keeps long shifts comfortable and aligns with security desk lighting.
+### Current Position
+**Security Supervisor at Regal Security Inc.**
+- Started: February 11, 2022
+- Location: Toronto, Ontario, Canada
+- Type: Permanent Full-time
 
-## License
+### Key Qualifications
+- 4+ years of security industry experience
+- 8+ professional certifications
+- Trilingual: Punjabi, English, Hindi
+- Experience with major companies (Google, Allied Universal, G4S)
 
-This project is open source. Adapt freely for your operational needs.
+### Certifications Include
+- Emergency First Aid with CPR C & AED
+- Condominium Management Limited License
+- Individual Security Guard License
+- Emergency Management
+- WHMIS
+
+## 🔧 Customization
+
+### Updating Content
+1. **Personal Information**: Edit `index.html` in the hero section
+2. **Experience**: Modify the timeline items in the experience section
+3. **Certifications**: Update the cert-grid in the certifications section
+4. **Colors**: Change CSS variables in `:root` selector in `styles.css`
+
+### Adding New Sections
+1. Add HTML structure in `index.html`
+2. Style in `styles.css`
+3. Add navigation link in the navbar
+4. Update JavaScript for scroll highlighting if needed
+
+## 🌐 Browser Support
+
+- ✅ Chrome (latest)
+- ✅ Firefox (latest)
+- ✅ Safari (latest)
+- ✅ Edge (latest)
+- ✅ Opera (latest)
+
+## 📊 Performance
+
+- Optimized CSS and JavaScript
+- Debounced scroll events
+- Intersection Observer for animations
+- Lazy loading support
+- Minimal external dependencies
+
+## 📞 Contact Information
+
+- **Email**: ajaypreetwork@gmail.com
+- **LinkedIn**: [Ajaypreet Singh](https://www.linkedin.com/in/ajaypreet-singh)
+- **Location**: Downtown, Toronto, Ontario, Canada
+
+## 📝 License
+
+© 2025 Ajaypreet Singh. All rights reserved.
+
+## 🤝 Contributing
+
+This is a personal resume website. For suggestions or improvements, please contact via email.
+
+## 📅 Version History
+
+### v1.0.0 (2025-11-30)
+- Initial release
+- Complete responsive website
+- All sections implemented
+- Interactive features added
+- Mobile navigation
+- Smooth animations
+
+## 🙏 Acknowledgments
+
+- Font Awesome for icons
+- Google Fonts for Inter font family
+- Modern CSS techniques and best practices
+- Web accessibility guidelines
+
+---
+
+**Built with ❤️ by Claude Code Assistant**
