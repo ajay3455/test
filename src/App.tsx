@@ -5,11 +5,15 @@ import { DashboardPage } from './pages/DashboardPage';
 import { PreAuthorizedPage } from './pages/PreAuthorizedPage';
 import { IntercomTrainerPage } from './pages/IntercomTrainerPage';
 import { GuardProfileSettings } from './components/GuardProfileSettings';
+import { IntercomTrainerPage } from './pages/IntercomTrainerPage';
 
 const navigation = [
   { to: '/', label: 'Contractor Log' },
   { to: '/pre-authorized', label: 'Pre-Authorized Directory' },
-  { to: '/intercom-trainer', label: 'Intercom Trainer' }
+codex/create-interactive-3d-intercom-module-6yjwza
+  { to: '/intercom', label: 'Intercom Trainer' }
+=======
+main
 ];
 
 export default function App() {
@@ -54,7 +58,10 @@ export default function App() {
           <Routes>
             <Route path="/" element={<DashboardPage />} />
             <Route path="/pre-authorized" element={<PreAuthorizedPage />} />
+codex/create-interactive-3d-intercom-module-6yjwza
+            <Route path="/intercom" element={<IntercomTrainerPage />} />
             <Route path="/intercom-trainer" element={<IntercomTrainerPage />} />
+ main
           </Routes>
         </main>
       </div>
